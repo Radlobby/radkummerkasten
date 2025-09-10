@@ -53,6 +53,11 @@ equivalent_sources = [
     "C:/hostedtoolcache/windows/Python/*/x64/Lib/site-packages/radkummerkasten/"
 ]
 
+[tool.coverage.report]
+exclude_also = [
+    'if __name__ == .__main__.:',
+]
+
 [tool.pytest.ini_options]
 addopts = "-p no:faulthandler --cov=radkummerkasten --cov-report term-missing --cov-report xml --import-mode=importlib"
 testpaths = ["tests"]

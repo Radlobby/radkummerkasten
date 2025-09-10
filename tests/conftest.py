@@ -11,7 +11,8 @@ import radkummerkasten
 @pytest.fixture()
 def application():
     """Start a flask application."""
-    yield radkummerkasten.application
+    application = radkummerkasten.create_application()
+    yield application
 
 
 @pytest.fixture()

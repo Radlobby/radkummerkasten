@@ -10,19 +10,19 @@ from .address import Address
 
 
 __all__ = [
-    "application",
+    "create_application",
 ]
 
 
-def create_app():
+def create_application():
+    """Create a new radkummerkasten application."""
     application = flask.Flask(__name__)
+
     application.register_blueprint(Address())
 
     return application
 
 
-application = create_app()
-
-
 if __name__ == "__main__":
+    application = create_application()
     application.run()
