@@ -16,7 +16,8 @@ dependencies = [
     "geopandas",
     "requests",
     "shapely",
-    "xdg-base-dirs",
+    "xdg-base-dirs; python_version > '3.9'",
+    "xdg; python_version < '3.10'",
 ]
 requires-python = ">=3.9"
 
@@ -38,7 +39,7 @@ tests = ["pytest", "pytest-cov", "pytest-lazy-fixtures"]
 
 
 [project.urls]
-#Documentation = "https://radkummerkasten.readthedocs.org/"
+# Documentation = "https://radkummerkasten.readthedocs.org/"
 Repository = "https://github.com/radlobby/radkummerkasten.git"
 "Change log" = "https://github.com/radlobby/radkummerkasten/blob/main/CHANGELOG.md"
 "Bug tracker" = "https://github.com/radlobby/radkummerkasten/issues"

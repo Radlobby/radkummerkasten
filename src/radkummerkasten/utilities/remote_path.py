@@ -8,7 +8,10 @@ import datetime
 import pathlib
 
 import requests
-import xdg_base_dirs
+try:
+    import xdg_base_dirs
+except ImportError:  # Python<3.10
+    import xdg as xdg_base_dirs
 
 
 __all__ = ["RemotePath"]
