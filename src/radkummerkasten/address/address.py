@@ -75,4 +75,4 @@ class Address(flask.Blueprint):
             address = {
                 "error": "Address not found",
             }
-        return address
+        return flask.jsonify(address)
