@@ -65,9 +65,8 @@ class RemotePath(pathlib.Path):
     def _download_remote_file(self):
         try:
             assert self.cached_path.exists()
-            assert (
-                datetime.timedelta(seconds=self.cached_path.stat().st_mtime)
-                > self.max_cache_age
+            assert datetime.datetime.fromtimestamp(self.cached_path.stat().st_mtime) > (
+                datetime.datetime.now() + self.max_cache_age
             )
         except (AssertionError, FileNotFoundError):
             self.cached_path.parent.mkdir(parents=True, exist_ok=True)

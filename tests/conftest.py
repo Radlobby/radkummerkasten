@@ -8,6 +8,11 @@ import pytest
 import radkummerkasten
 
 
+SOME_ONLINE_FILE_URL = (
+    "https://github.com/christophfink/radkummerkasten.at/blob/main/LICENSE"
+)
+
+
 @pytest.fixture()
 def application():
     """Start a flask application."""
@@ -25,3 +30,8 @@ def client(application):
 def runner(application):
     """Provide a cli runner for the tests."""
     return application.test_cli_runner()
+
+
+@pytest.fixture()
+def some_online_file_url():
+    yield SOME_ONLINE_FILE_URL
