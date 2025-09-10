@@ -8,6 +8,7 @@ import datetime
 import pathlib
 
 import requests
+
 try:
     import xdg_base_dirs
 except ImportError:  # Python<3.10
