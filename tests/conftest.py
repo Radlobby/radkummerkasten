@@ -34,4 +34,5 @@ def runner(application):
 
 @pytest.fixture()
 def some_online_file_url():
+    """Return the URL of a random online file."""
     yield SOME_ONLINE_FILE_URL
