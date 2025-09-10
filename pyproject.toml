@@ -1,0 +1,60 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=61.0.0", "wheel"]
+
+[project]
+name = "radkummerkasten"
+description = "A suggestion/complaints box for the Austrian Cycling Federation"
+readme = "README.md"
+
+authors = [
+    { name = "Christoph Fink" },
+]
+
+dependencies = [
+    "flask",
+    "geopandas",
+    "requests",
+    "shapely",
+    "xdg-base-dirs",
+]
+requires-python = ">=3.9"
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Environment :: Web Environment",
+    "Framework :: Flask",
+]
+keywords = ["survey", "cycling", "map", "cartography"]
+license = "GPL-3.0-or-later"
+
+dynamic = ["version"]
+
+[project.optional-dependencies]
+docs = [ "sphinx", "sphinx-book-theme", "sphinx-design",
+        "sphinxcontrib-bibtex", "sphinxcontrib-images"]
+tests = ["pytest", "pytest-cov", "pytest-lazy-fixtures"]
+
+
+[project.urls]
+#Documentation = "https://radkummerkasten.readthedocs.org/"
+Repository = "https://github.com/radlobby/radkummerkasten.git"
+"Change log" = "https://github.com/radlobby/radkummerkasten/blob/main/CHANGELOG.md"
+"Bug tracker" = "https://github.com/radlobby/radkummerkasten/issues"
+
+[tool.coverage.paths]
+equivalent_sources = [
+    "src/radkummerkasten/",
+    ".virtualenv/lib/python*/site-packages/radkummerkasten/",
+    "/opt/hostedtoolcache/Python/*/x64/lib/python*/site-packages/radkummerkasten/",
+    "/Library/Frameworks/Python.framework/Versions/*/lib/python*/site-packages/radkummerkasten/",
+    "C:/hostedtoolcache/windows/Python/*/x64/Lib/site-packages/radkummerkasten/"
+]
+
+[tool.pytest.ini_options]
+addopts = "-p no:faulthandler --cov=radkummerkasten --cov-report term-missing --cov-report xml --import-mode=importlib"
+testpaths = ["tests"]
+
+[tool.setuptools.dynamic]
+version = {attr = "radkummerkasten.__version__"}
