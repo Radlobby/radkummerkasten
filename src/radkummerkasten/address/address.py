@@ -9,7 +9,7 @@ import geopandas
 import shapely
 
 from ..utilities import RemotePath
-from ..utilities.decorator import local_referer_only
+from ..utilities.decorators import local_referer_only
 
 # TODO: move to config
 VORONOI_POLYGONS = RemotePath(
