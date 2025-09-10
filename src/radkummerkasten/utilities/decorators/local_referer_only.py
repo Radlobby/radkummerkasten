@@ -11,6 +11,7 @@ import flask
 
 def local_referer_only(f):
     """Decorate a flask method to allow only local referers."""
+
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
         # TODO

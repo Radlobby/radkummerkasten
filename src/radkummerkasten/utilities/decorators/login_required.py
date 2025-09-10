@@ -11,6 +11,7 @@ import flask
 
 def login_required(f):
     """Decorate a flask method to require login."""
+
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
         if flask.g.user is None:
