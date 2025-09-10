@@ -59,7 +59,7 @@ exclude_also = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "-p no:faulthandler --cov=radkummerkasten --cov-report term-missing --cov-report xml --import-mode=importlib"
+addopts = "-p no:faulthandler --cov=radkummerkasten --cov-report term-missing --cov-report xml --import-mode=importlib --junitxml=junit.xml -o junit_family=legacy"
 testpaths = ["tests"]
 
 [tool.setuptools.dynamic]
