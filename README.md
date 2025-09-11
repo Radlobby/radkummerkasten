@@ -4,9 +4,13 @@
 <!--// [![stable version][stable-version-badge]][stable-version-link] //-->
 <!--// [![downloads (pypi)][downloads-pypi-badge]][downloads-pypi-link] //-->
 <br />
+
 [![Unit tests][test-status-badge]][test-status-link]
+
 <!--//[![Documentation Status][rtd-status-badge]][rtd-status-link] //-->
+
 [![Coverage][coverage-badge]][coverage-link]
+
 <br />
 
 
