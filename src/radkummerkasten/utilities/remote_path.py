@@ -66,9 +66,9 @@ class RemotePath(pathlib.Path):
         try:
             assert self.cached_path.exists()
             assert datetime.datetime.fromtimestamp(self.cached_path.stat().st_mtime) > (
-                datetime.datetime.now() + self.max_cache_age
+                datetime.datetime.now() - self.max_cache_age
             )
-        except (AssertionError, FileNotFoundError):
+        except AssertionError:
             self.cached_path.parent.mkdir(parents=True, exist_ok=True)
             with requests.get(self.remote_url) as response:
                 self.cached_path.write_bytes(response.content)
