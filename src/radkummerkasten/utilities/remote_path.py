@@ -19,6 +19,7 @@ __all__ = ["RemotePath"]
 
 
 MAX_CACHE_AGE = datetime.timedelta(weeks=12)
+PACKAGE = __name__.split(".")[0]
 
 
 class RemotePath(pathlib.Path):
@@ -31,7 +32,7 @@ class RemotePath(pathlib.Path):
     except AttributeError:  # Python>=3.13
         pass
 
-    _CACHE_DIR = xdg_base_dirs.xdg_cache_home() / f"{__name__}"
+    _CACHE_DIR = xdg_base_dirs.xdg_cache_home() / f"{PACKAGE}"
 
     def __new__(cls, remote_url, max_cache_age=MAX_CACHE_AGE):
         """Define a data set that is downloaded and cached on demand."""
