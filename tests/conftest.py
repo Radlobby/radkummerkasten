@@ -16,7 +16,7 @@ SOME_ONLINE_FILE_URL = (
 @pytest.fixture()
 def application():
     """Start a flask application."""
-    application = radkummerkasten.create_application()
+    application = radkummerkasten.create_app()
     yield application
 
 

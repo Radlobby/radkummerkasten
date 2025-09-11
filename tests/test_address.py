@@ -52,6 +52,6 @@ class Test_Address:
         ],
     )
     def test_address_by_coordinates(self, lon, lat, expected_address, client):
-        response = client.get(f"/address/by-coordinates/{lon},{lat}")
+        response = client.get(f"/api/address/by-coordinates/{lon},{lat}")
         print(response.json)
         assert response.json == expected_address

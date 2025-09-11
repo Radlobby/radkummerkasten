@@ -5,24 +5,28 @@
 
 
 import flask
+import werkzeug.middleware.dispatcher
 
-from .address import Address
+from . import api, frontend
 
 
 __all__ = [
-    "create_application",
+    "create_app",
 ]
 
 
-def create_application():
+def create_app():
     """Create a new radkummerkasten application."""
     application = flask.Flask(__name__)
-
-    application.register_blueprint(Address())
-
+    application.wsgi_app = werkzeug.middleware.dispatcher.DispatcherMiddleware(
+        frontend.create_app(),
+        {
+            "/api": api.create_app(),
+        },
+    )
     return application
 
 
 if __name__ == "__main__":
-    application = create_application()
+    application = create_app()
     application.run()
