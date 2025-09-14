@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
 
-"""Application logic"""
+"""Application logic."""
 
 
 from .address_lookup import AddressLookup
 
 
-__all__ = [
-    "AddressLookup"
-]
+__all__ = ["AddressLookup"]
