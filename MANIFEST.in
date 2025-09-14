@@ -1,3 +1,4 @@
+recursive-include src/**/static *.min.css *.min.js *.html
 recursive-include tests *.py
 recursive-include tests/data *
 global-exclude *.pyc

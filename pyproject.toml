@@ -1,6 +1,7 @@
 [build-system]
-build-backend = "setuptools.build_meta"
-requires = ["setuptools>=61.0.0", "wheel"]
+requires = ["setuptools>=80.0.0", "wheel"]
+build-backend = "build_meta"
+backend-path = ["build_backend"]
 
 [project]
 name = "radkummerkasten"
@@ -62,6 +63,9 @@ exclude_also = [
 [tool.pytest.ini_options]
 addopts = "-p no:faulthandler --cov=radkummerkasten --cov-report term-missing --cov-report xml --import-mode=importlib --junitxml=junit.xml -o junit_family=legacy"
 testpaths = ["tests"]
+
+[tools.radkummerkasten-build-backend]
+sass_files = ["src/radkummerkasten/frontend/static/radkummerkasten.sass"]
 
 [tool.setuptools.dynamic]
 version = {attr = "radkummerkasten.__version__"}
