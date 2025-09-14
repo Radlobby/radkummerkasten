@@ -5,19 +5,9 @@
 
 
 import flask
-import geopandas
-import shapely
 
-from ..utilities import RemotePath
+from ..core import AddressLookup
 from ..utilities.decorators import local_referer_only
-
-# TODO: move to config
-VORONOI_POLYGONS = RemotePath(
-    "https://christophfink.github.io"
-    "/austrian-addresses"
-    "/austrian-addresses-voronoi.gpkg.zip"
-)
-RANDOM_POINT = shapely.Point(16, 48)
 
 
 __all__ = [
@@ -40,11 +30,7 @@ class Address(flask.Blueprint):
         kwargs.update(self._kwargs)
         super().__init__(self._NAME, self._IMPORT_NAME, *args, **kwargs)
 
-        self._data = geopandas.read_file(VORONOI_POLYGONS)
-
-        # look up one point to prime spatial index
-        _ = self._data.sindex.query(RANDOM_POINT)
-
+        self._address_lookup = AddressLookup()
         self.add_url_rule(
             "/by-coordinates/<float:lon>,<float:lat>",
             view_func=self.look_up_address,
@@ -54,25 +40,5 @@ class Address(flask.Blueprint):
     @local_referer_only
     def look_up_address(self, lon, lat):
         """Look up an address from a pair of coordinates."""
-        point = shapely.Point(lon, lat)
-        try:
-            record = self._data[["city", "postcode", "street", "housenumber"]].loc[
-                self._data.sindex.query(
-                    point,
-                    predicate="within",
-                )[0]
-            ]
-
-            address = {
-                "city": record["city"],
-                "postcode": record["postcode"],
-                "street": record["street"],
-                "housenumber": record["housenumber"],
-            }
-            if address["street"] is None:
-                address["street"] = address["city"]
-        except IndexError:
-            address = {
-                "error": "Address not found",
-            }
+        address = self._address_lookup.lookup_address(lon, lat)
         return flask.jsonify(address)
