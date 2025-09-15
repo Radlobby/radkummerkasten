@@ -34,3 +34,4 @@ docs/jupyter_execute/
 coverage.xml
 .vscode/*
 junit.xml
+.pytest_cache
