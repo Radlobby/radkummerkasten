@@ -40,7 +40,7 @@ class Tiles:
         )
 
     def tile(self, z, x, y):
-        """ "Retrieve the vector tile at tile index `x`, `y` for zoom level `z`."""
+        """Retrieve the vector tile at tile index `x`, `y` for zoom level `z`."""
         tile = self._tile_index.get_tile(z, x, y)
         if tile is not None:
             tile = vt2pbf(tile)
