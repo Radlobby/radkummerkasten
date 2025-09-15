@@ -14,9 +14,12 @@ __all__ = [
 ]
 
 
+__MODULE__ = __name__.split('.')[0]
+
+
 def create_app():
     """Create a new radkummerkasten application."""
-    application = flask.Flask(__name__)
+    application = flask.Flask(__MODULE__)
     application.wsgi_app = werkzeug.middleware.dispatcher.DispatcherMiddleware(
         frontend.create_app(),
         {
