@@ -52,6 +52,8 @@ jobs:
       
       - run: npm install @babel/core @babel/cli
 
+      - run: PATH="node_modules/.bin:${PATH}"
+
       - run: python -m pip install --prefer-binary .[tests]
 
       - run: python -m pytest
