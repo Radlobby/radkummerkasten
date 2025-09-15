@@ -14,7 +14,7 @@ __all__ = [
 ]
 
 
-__MODULE__ = __name__.split('.')[0]
+__MODULE__ = __name__.split(".")[0]
 
 
 def create_app():
