@@ -55,6 +55,7 @@ def _assert_babeljs_available():
             "install",
             "@babel/core",
             "@babel/cli",
+            "babel-preset-minify",
         ]
     )
     return True
@@ -77,6 +78,7 @@ def _compile_ecmascript_file(input_filenames):
     nodejs.npx.run(
         ["babel"]
         + [f"{input_filename}" for input_filename in input_filenames]
+        + ["--presets", "minify"]
         + ["--out-file", f"{output_filename}"]
     )
     return output_filename
