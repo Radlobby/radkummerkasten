@@ -63,14 +63,14 @@ exclude_also = [
 ]
 
 [tool.flake8]
-max-line-length = 88
-extent-select = ["B950"]
-extent-ignore = ["E203", "E501", "E701"]
 exclude = ["build", "dist", "docs/conf.py", ".virtualenv"]
+extent-ignore = ["E203", "E501", "E701"]
+extent-select = ["B950"]
+max-line-length = 88
 
 [tool.isort]
 profile = "black"
-src_paths = ["build_backend", "src", "test"]
+skip = ["build", "dist", "docs/conf.py", ".virtualenv"]
 
 [tools.pylintrc]
 good-names = ["i", "j", "k", "e", "ex", "id", "Run", "_"]

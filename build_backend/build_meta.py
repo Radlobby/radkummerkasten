@@ -140,7 +140,7 @@ def build_sass(f):
 @build_ecmascript
 @build_sass
 def build_editable(wheel_directory, config_settings=None, metadata_directory=None):
-    """Override setuptools.build_meta.build_editable to also compile SASS and JS files."""
+    """Override setuptools.build_meta to also compile SASS and JS files."""
     return setuptools.build_meta.build_editable(
         wheel_directory, config_settings, metadata_directory
     )
@@ -149,29 +149,29 @@ def build_editable(wheel_directory, config_settings=None, metadata_directory=Non
 @build_ecmascript
 @build_sass
 def build_sdist(sdist_directory, config_settings=None):
-    """Override setuptools.build_meta.build_sdist also compile SASS and JS files."""
+    """Override setuptools.build_meta also compile SASS and JS files."""
     return setuptools.build_meta.build_sdist(sdist_directory, config_settings)
 
 
 @build_ecmascript
 @build_sass
 def build_wheel(wheel_directory, config_settings=None, metadata_directory=None):
-    """Override setuptools.build_meta.build_wheel to also compile SASS and JS files."""
+    """Override setuptools.build_meta to also compile SASS and JS files."""
     return setuptools.build_meta.build_wheel(
         wheel_directory, config_settings, metadata_directory
     )
 
 
 def get_requires_for_build_editable(config_settings=None):
-    """Override setuptools.build_meta.get_requires_for_build_editable to install libsass and babeljs."""
+    """Override setuptools.build_meta to install libsass and babeljs."""
     return BUILD_REQUIREMENTS
 
 
 def get_requires_for_build_sdist(config_settings=None):
-    """Override setuptools.build_meta.get_requires_for_build_sdist to install libsass and babeljs."""
+    """Override setuptools.build_meta to install libsass and babeljs."""
     return BUILD_REQUIREMENTS
 
 
 def get_requires_for_build_wheel(config_settings=None):
-    """Override setuptools.build_meta.get_requires_for_build_wheel to install libsass and babeljs."""
+    """Override setuptools.build_meta to install libsass and babeljs."""
     return BUILD_REQUIREMENTS
