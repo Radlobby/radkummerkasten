@@ -14,9 +14,12 @@ authors = [
 
 dependencies = [
     "flask",
+    "geojson2vt",
     "geopandas",
+    "mercantile",
     "requests",
     "shapely",
+    "vt2pbf",
     "werkzeug",
     "xdg-base-dirs; python_version > '3.9'",
     "xdg; python_version < '3.10'",

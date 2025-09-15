@@ -7,7 +7,7 @@
 import flask
 import werkzeug.middleware.dispatcher
 
-from . import api, frontend
+from . import api, frontend, tiles
 
 __all__ = [
     "create_app",
@@ -21,6 +21,7 @@ def create_app():
         frontend.create_app(),
         {
             "/api": api.create_app(),
+            "/tiles": tiles.create_app(),
         },
     )
     return application
