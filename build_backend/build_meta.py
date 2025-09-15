@@ -30,6 +30,7 @@ ecmascript_files = ["src/radkummerkasten/frontend/static/radkummerkasten.js"]
 
 import functools
 import pathlib
+
 try:
     import tomllib
 except ModuleNotFoundError:  # Python <3.11
