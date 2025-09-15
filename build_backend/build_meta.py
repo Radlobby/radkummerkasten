@@ -30,7 +30,10 @@ ecmascript_files = ["src/radkummerkasten/frontend/static/radkummerkasten.js"]
 
 import functools
 import pathlib
-import tomllib
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python <3.11
+    import tomli as tomllib
 
 import setuptools.build_meta
 from setuptools.build_meta import *  # noqa: F401, F403
