@@ -52,7 +52,9 @@ jobs:
       
       - run: npm install @babel/core @babel/cli
 
-      - run: PATH="node_modules/.bin:${PATH}"
+      - run: export PATH="node_modules/.bin:${PATH}"
+
+      - run: which babel
 
       - run: python -m pip install --prefer-binary .[tests]
 
