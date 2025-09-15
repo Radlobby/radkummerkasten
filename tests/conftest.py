@@ -17,6 +17,7 @@ SOME_ONLINE_FILE_URL = (
 def application():
     """Start a flask application."""
     application = radkummerkasten.create_app()
+    application.config["TESTING"] = True
     yield application
 
 
