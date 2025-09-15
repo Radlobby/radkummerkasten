@@ -6,11 +6,8 @@ A custom build backend that also compiles SASS and ECMA-script.
 
 This build backend is a thin wrapper around the default setuptools.build_meta
 backend. It compiles SASS source files to CSS and transpiles and concatenates
-ECMA script files into one common JavaScript file.
-
-For this, it needs an external dependency: babeljs (https://babeljs.io). Thise
-build backend works on Python >=3.11 and implements a PEP517 in-tree build
-backend.
+ECMA script files into one common JavaScript file. This build backend works on
+Python >=3.11 and implements a PEP517 in-tree build backend.
 
 To configure which files are compiled and transpiled, add a section
 `tools.radkummerkasten-build-backend` to `pyproject.toml` and add the options
@@ -44,20 +41,21 @@ from setuptools.build_meta import *  # noqa: F401, F403
 
 BUILD_REQUIREMENTS = [
     "libsass",
+    "nodejs-bin",
 ]
 
 
+@functools.cache
 def _assert_babeljs_available():
-    try:
-        assert shutil.which("babel")
-        version = subprocess.check_output(["babel", "--version"]).decode("utf-8")
-        assert re.match(
-            r"[0-9]+\.[0-9]+\.[0-9]+ \(@babel\/core [0-9]+\.[0-9]+\.[0-9]+\)", version
-        )
-    except AssertionError:
-        raise RuntimeError(
-            """Install `babeljs` (https://babeljs.io) to build radkummerkasten."""
-        )
+    import nodejs
+    nodejs.npm.call(
+        [
+            "install",
+            "@babel/core",
+            "@babel/cli",
+        ]
+    )
+    return True
 
 
 def _compile_sass_file(input_filename):
@@ -70,8 +68,10 @@ def _compile_sass_file(input_filename):
 
 
 def _compile_ecmascript_file(input_filenames):
+    import nodejs
+    _assert_babeljs_available()
     output_filename = input_filenames[0].parent / "radkummerkasten.min.js"
-    subprocess.run(
+    nodejs.npx.run(
         ["babel"]
         + [f"{input_filename}" for input_filename in input_filenames]
         + ["--out-file", f"{output_filename}"]
@@ -160,17 +160,14 @@ def build_wheel(wheel_directory, config_settings=None, metadata_directory=None):
 
 def get_requires_for_build_editable(config_settings=None):
     """Override setuptools.build_meta.get_requires_for_build_editable to install libsass and babeljs."""
-    _assert_babeljs_available()
     return BUILD_REQUIREMENTS
 
 
 def get_requires_for_build_sdist(config_settings=None):
     """Override setuptools.build_meta.get_requires_for_build_sdist to install libsass and babeljs."""
-    _assert_babeljs_available()
     return BUILD_REQUIREMENTS
 
 
 def get_requires_for_build_wheel(config_settings=None):
     """Override setuptools.build_meta.get_requires_for_build_wheel to install libsass and babeljs."""
-    _assert_babeljs_available()
     return BUILD_REQUIREMENTS
