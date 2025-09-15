@@ -9,7 +9,6 @@ import flask
 from ..core import AddressLookup
 from ..utilities.decorators import local_referer_only
 
-
 __all__ = [
     "Address",
 ]

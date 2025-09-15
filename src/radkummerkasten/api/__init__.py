@@ -8,7 +8,6 @@ import flask
 
 from .address import Address
 
-
 __all__ = [
     "create_app",
 ]

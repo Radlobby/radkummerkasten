@@ -5,8 +5,8 @@
 
 
 import pytest
-import radkummerkasten
 
+import radkummerkasten
 
 SOME_ONLINE_FILE_URL = (
     "https://github.com/christophfink/radkummerkasten.at/blob/main/LICENSE"

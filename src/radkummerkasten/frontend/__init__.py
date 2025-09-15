@@ -6,7 +6,6 @@
 
 import flask
 
-
 __all__ = [
     "create_app",
 ]

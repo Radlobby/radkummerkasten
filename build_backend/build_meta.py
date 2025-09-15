@@ -39,7 +39,6 @@ except ModuleNotFoundError:  # Python <3.11
 import setuptools.build_meta
 from setuptools.build_meta import *  # noqa: F401, F403
 
-
 BUILD_REQUIREMENTS = [
     "libsass",
     "nodejs-bin",

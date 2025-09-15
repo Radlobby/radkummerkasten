@@ -9,7 +9,6 @@ import werkzeug.middleware.dispatcher
 
 from . import api, frontend
 
-
 __all__ = [
     "create_app",
 ]

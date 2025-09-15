@@ -6,5 +6,4 @@
 
 from .address_lookup import AddressLookup
 
-
 __all__ = ["AddressLookup"]

@@ -35,7 +35,9 @@ license = "GPL-3.0-or-later"
 dynamic = ["version"]
 
 [project.optional-dependencies]
-docs = [ "sphinx", "sphinx-book-theme", "sphinx-design",
+dev = ["black", "flake8", "flake8-bugbear", "flake8-pyproject", "isort",
+       "pydocstyle", "pylint"]
+docs = ["sphinx", "sphinx-book-theme", "sphinx-design",
         "sphinxcontrib-bibtex", "sphinxcontrib-images"]
 tests = ["pytest", "pytest-cov", "pytest-lazy-fixtures"]
 
@@ -59,6 +61,20 @@ equivalent_sources = [
 exclude_also = [
     'if __name__ == .__main__.:',
 ]
+
+[tool.flake8]
+max-line-length = 88
+extent-select = ["B950"]
+extent-ignore = ["E203", "E501", "E701"]
+exclude = ["build", "dist", "docs/conf.py", ".virtualenv"]
+
+[tool.isort]
+profile = "black"
+src_paths = ["build_backend", "src", "test"]
+
+[tools.pylintrc]
+good-names = ["i", "j", "k", "e", "ex", "id", "Run", "_"]
+max-line-length = 88
 
 [tool.pytest.ini_options]
 addopts = "-p no:faulthandler --cov=radkummerkasten --cov-report term-missing --cov-report xml --import-mode=importlib --junitxml=junit.xml -o junit_family=legacy"
