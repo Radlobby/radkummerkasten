@@ -30,9 +30,6 @@ ecmascript_files = ["src/radkummerkasten/frontend/static/radkummerkasten.js"]
 
 import functools
 import pathlib
-import re
-import shutil
-import subprocess
 import tomllib
 
 import setuptools.build_meta
@@ -48,6 +45,7 @@ BUILD_REQUIREMENTS = [
 @functools.cache
 def _assert_babeljs_available():
     import nodejs
+
     nodejs.npm.call(
         [
             "install",
@@ -69,6 +67,7 @@ def _compile_sass_file(input_filename):
 
 def _compile_ecmascript_file(input_filenames):
     import nodejs
+
     _assert_babeljs_available()
     output_filename = input_filenames[0].parent / "radkummerkasten.min.js"
     nodejs.npx.run(
