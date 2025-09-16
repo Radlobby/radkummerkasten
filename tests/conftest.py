@@ -48,4 +48,7 @@ def some_online_file_url():
 def expected_tile_pbf(request):
     """Read the expected content of a vector tile from disk."""
     with (TEST_DATA_DIRECTORY / f"{request.param}.pbf").open("rb") as f:
-        yield f.read()
+        tile_pbf = f.read()
+    if tile_pbf.endswith(b"\r\n"):  # weird line feeds when reading on windows
+        tile_pbf = tile_pbf[:-2] + b"\n"
+    return tile_pbf
