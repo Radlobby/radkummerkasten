@@ -17,7 +17,7 @@ __all__ = [
 class Tiles(flask.Blueprint):
     """Serve vector tiles."""
 
-    _NAME = "address"
+    _NAME = "tiles"
     _IMPORT_NAME = __name__
     _kwargs = {
         "url_prefix": "/",
