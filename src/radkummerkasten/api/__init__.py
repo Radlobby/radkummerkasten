@@ -4,8 +4,7 @@
 """Radkummerkasten frontend."""
 
 
-import flask
-
+from .. import factory
 from .address import Address
 
 __all__ = [
@@ -13,14 +12,9 @@ __all__ = [
 ]
 
 
-def create_app(instance_path):
+def create_app():
     """Create a new radkummerkasten.api application."""
-    application = flask.Flask(
-        __name__,
-        instance_path,
-        instance_relative_config=True,
-    )
-
+    application = factory.create_app(__name__)
     application.register_blueprint(Address())
 
     return application

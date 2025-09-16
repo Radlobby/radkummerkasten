@@ -3,6 +3,7 @@
 
 """Common fixtures and settings for testing radkummerkasten."""
 
+import pathlib
 
 import pytest
 
@@ -11,13 +12,14 @@ import radkummerkasten
 SOME_ONLINE_FILE_URL = (
     "https://github.com/christophfink/radkummerkasten.at/blob/main/LICENSE"
 )
+TEST_DATA_DIRECTORY = pathlib.Path(__file__).parent / "data"
 
 
 @pytest.fixture()
 def application():
     """Start a flask application."""
-    application = radkummerkasten.create_app()
-    application.config["TESTING"] = True
+    instance_path = TEST_DATA_DIRECTORY
+    application = radkummerkasten.create_app(instance_path)
     yield application
 
 
