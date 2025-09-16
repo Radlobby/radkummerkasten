@@ -3,11 +3,12 @@
 
 """Presets of radkummerkasten configuration."""
 
-
+from .default_configuration import DefaultConfiguration
 from .production_configuration import ProductionConfiguration
-from .testing_configuration import TestingConfiguration
+from .test_configuration import TestConfiguration
 
 __all__ = [
+    "DefaultConfiguration",
     "ProductionConfiguration",
-    "TestingConfiguration",
+    "TestConfiguration",
 ]

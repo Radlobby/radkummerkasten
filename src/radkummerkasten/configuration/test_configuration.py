@@ -4,10 +4,10 @@
 """Test configuration options."""
 
 
-from .base_configuration import BaseConfiguration
+from .default_configuration import DefaultConfiguration
 
 
-class TestConfiguration(BaseConfiguration):
+class TestConfiguration(DefaultConfiguration):
     """Test configuration."""
 
     TESTING = True

@@ -20,7 +20,7 @@ def create_app(instance_path=None):
     """Create a new radkummerkasten application."""
     application = factory.create_app(__MODULE__, instance_path=instance_path)
     application.wsgi_app = werkzeug.middleware.dispatcher.DispatcherMiddleware(
-        frontend.create_app(),
+        frontend.create_app(instance_path),
         {
             "/api": api.create_app(instance_path),
             "/tiles": tiles.create_app(instance_path),

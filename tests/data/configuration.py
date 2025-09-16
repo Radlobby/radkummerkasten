@@ -4,12 +4,9 @@
 """Define configuration options for testing radkummerkasten."""
 
 
-from radkummerkasten.configuration import TestConfiguration
+import pathlib
 
 
-class Configuration(TestConfiguration):
-    """Configuration for testing radkummerkasten."""
-
-    tile_layers = [
-        "radlkarte-wien.geojson",
-    ]
+TILE_LAYERS = [
+    pathlib.Path("radlkarte-wien.geojson").absolute(),
+]

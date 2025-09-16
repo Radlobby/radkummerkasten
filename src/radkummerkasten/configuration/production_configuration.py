@@ -4,10 +4,10 @@
 """Production configuration options."""
 
 
-from .base_configuration import BaseConfiguration
+from .default_configuration import DefaultConfiguration
 
 
-class ProductionConfiguration(BaseConfiguration):
+class ProductionConfiguration(DefaultConfiguration):
     """Production configuration."""
 
     pass
