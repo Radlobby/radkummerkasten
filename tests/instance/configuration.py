@@ -9,6 +9,6 @@ import pathlib
 _DATA_DIR = pathlib.Path(__file__).parent
 
 
-TILE_LAYERS = [
-    (_DATA_DIR / "radlkarte-wien.geojson").absolute(),
-]
+TILE_LAYERS = {
+    "radlkarte": (_DATA_DIR / "radlkarte-wien.geojson").absolute(),
+}

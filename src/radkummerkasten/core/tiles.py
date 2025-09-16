@@ -9,7 +9,6 @@ import pathlib
 from geojson2vt import geojson2vt
 from vt2pbf import vt2pbf
 
-
 # TODO: relate to our data, on the fly
 
 
@@ -23,7 +22,6 @@ class Tiles:
 
     def __init__(self, tile_layer, *args, **kwargs):
         """Compute vector tiles of one of more datasets."""
-
         tile_layer = pathlib.Path(tile_layer)
         with tile_layer.open() as f:
             data = json.load(f)

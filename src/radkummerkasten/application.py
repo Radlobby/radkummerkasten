@@ -4,6 +4,8 @@
 """The application object for radkummerkasten."""
 
 
+import pathlib
+
 import werkzeug.middleware.dispatcher
 
 from . import api, factory, frontend, tiles
@@ -13,10 +15,12 @@ __all__ = [
 ]
 
 
-__MODULE__ = __name__.split(".")[0]
+__MODULE__ = __name__.split(".", maxsplit=1)[0]
+
+DEFAULT_INSTANCE_PATH = (pathlib.Path.cwd() / "instance").absolute()
 
 
-def create_app(instance_path=None):
+def create_app(instance_path=DEFAULT_INSTANCE_PATH):
     """Create a new radkummerkasten application."""
     application = factory.create_app(__MODULE__, instance_path=instance_path)
     application.wsgi_app = werkzeug.middleware.dispatcher.DispatcherMiddleware(
@@ -27,8 +31,3 @@ def create_app(instance_path=None):
         },
     )
     return application
-
-
-if __name__ == "__main__":
-    application = create_app()
-    application.run()

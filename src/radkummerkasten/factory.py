@@ -37,6 +37,6 @@ def create_app(package_name, instance_path=None):
     else:
         application.config.from_object(ProductionConfiguration)
 
-    application.config.from_pyfile("configuration.py")
+    application.config.from_pyfile("configuration.py", silent=True)
 
     return application

@@ -15,6 +15,6 @@ __all__ = [
 def create_app(instance_path):
     """Create a new radkummerkasten.tiles application."""
     application = factory.create_app(__name__, instance_path)
-    application.register_blueprint(Tiles(application.config["TILE_LAYERS"]))
+    application.register_blueprint(Tiles(application.config))
 
     return application
