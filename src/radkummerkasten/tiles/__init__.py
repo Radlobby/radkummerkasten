@@ -13,9 +13,13 @@ __all__ = [
 ]
 
 
-def create_app():
+def create_app(instance_path):
     """Create a new radkummerkasten.tiles application."""
-    application = flask.Flask(__name__)
+    application = flask.Flask(
+        __name__,
+        instance_path,
+        instance_relative_config=True,
+    )
 
     application.register_blueprint(Tiles())
 
