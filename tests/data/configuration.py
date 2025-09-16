@@ -6,7 +6,9 @@
 
 import pathlib
 
+_DATA_DIR = pathlib.Path(__file__).parent
+
 
 TILE_LAYERS = [
-    pathlib.Path("radlkarte-wien.geojson").absolute(),
+    (_DATA_DIR / "radlkarte-wien.geojson").absolute(),
 ]
