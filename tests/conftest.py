@@ -67,11 +67,11 @@ def some_online_file_url():
 
 @pytest.fixture(scope="session")
 def test_data_directory():
-    """"Return the path to the test data directory"""
+    """Return the path to the test data directory."""
     yield TEST_DATA_DIRECTORY
 
 
 @pytest.fixture(scope="session")
 def test_instance_directory():
-    """"Return the path to the test instance directory"""
+    """Return the path to the test instance directory."""
     yield TEST_INSTANCE_DIRECTORY

@@ -30,8 +30,10 @@ class Test_Factory:
             ("true",),
             ("on",),
             ("FOOBAR",),
-        ]
+        ],
     )
-    def test_create_app_with_testing_env(self, test_instance_directory, env_testing_value):
+    def test_create_app_with_testing_env(
+        self, test_instance_directory, env_testing_value
+    ):
         os.environ["TESTING"] = "0"
         _ = radkummerkasten.create_app(instance_path=test_instance_directory)
