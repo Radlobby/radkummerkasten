@@ -65,3 +65,11 @@ class Test_Tiles:
         response = client.get(f"/tiles/{layer}/{z}/{x}/{y}")
         assert response.status_code == expected_http_status
         assert response.get_data() == expected_tile_pbf
+
+    def test_without_tile_layers(
+        self,
+        application_without_tile_layers
+    ):
+        client = application_without_tile_layers.test_client()
+        response = client.get("/tiles/layer/12/345/678")
+        assert response.status_code == 404
