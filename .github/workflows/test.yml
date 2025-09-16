@@ -53,7 +53,6 @@ jobs:
       - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: christophfink/radkummerkasten.at
 
       - uses: codecov/test-results-action@v1
         if: ${{ !cancelled() }}
