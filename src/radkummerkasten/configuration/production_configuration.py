@@ -9,5 +9,3 @@ from .default_configuration import DefaultConfiguration
 
 class ProductionConfiguration(DefaultConfiguration):
     """Production configuration."""
-
-    pass
