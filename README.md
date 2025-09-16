@@ -28,8 +28,8 @@ This work is licensed under GNU General Public License v3.0.
 <!-- links used throughout the document -->
 
 <!-- (1) badges -->
-[coverage-badge]: https://codecov.io/gh/christophfink/radkummerkasten.at/graph/badge.svg?token=W8M41NEL56
-[coverage-link]: https://codecov.io/gh/christophfink/radkummerkasten.at/
+[coverage-badge]: https://codecov.io/gh/christophfink/radkummerkasten/graph/badge.svg?token=W8M41NEL56
+[coverage-link]: https://codecov.io/gh/christophfink/radkummerkasten/
 [downloads-pypi-badge]: https://static.pepy.tech/personalized-badge/radkummerkasten?period=total&units=international_system&left_color=grey&right_color=orange&left_text=Downloads%20(pypi)
 [downloads-pypi-link]: https://pypi.org/project/radkummerkasten/
 [rtd-status-badge]: https://readthedocs.org/projects/radkummerkasten/badge/?version=stable
