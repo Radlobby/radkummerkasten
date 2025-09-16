@@ -4,8 +4,7 @@
 """Map tiles for radkummerkasten."""
 
 
-import flask
-
+from .. import factory
 from .tiles import Tiles
 
 __all__ = [
@@ -13,10 +12,9 @@ __all__ = [
 ]
 
 
-def create_app():
+def create_app(instance_path):
     """Create a new radkummerkasten.tiles application."""
-    application = flask.Flask(__name__)
-
-    application.register_blueprint(Tiles())
+    application = factory.create_app(__name__, instance_path)
+    application.register_blueprint(Tiles(application.config))
 
     return application

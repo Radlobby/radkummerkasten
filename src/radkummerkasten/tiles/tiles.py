@@ -23,25 +23,43 @@ class Tiles(flask.Blueprint):
         "url_prefix": "/",
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, configuration, *args, **kwargs):
         """Provide a blueprint for vector tiles."""
         kwargs = kwargs or {}
         kwargs.update(self._kwargs)
         super().__init__(self._NAME, self._IMPORT_NAME, *args, **kwargs)
 
-        self._tiles = tiles.Tiles()
-        self.add_url_rule(
-            "/<int:z>/<int:x>/<int:y>",
-            view_func=self.tile,
-            methods=("GET",),
-        )
+        try:
+            tile_layers = configuration["TILE_LAYERS"]
+        except KeyError:
+            tile_layers = {}
+
+        self._tiles = {}
+        for tile_layer_name, tile_layer_source in tile_layers.items():
+            self._tiles[tile_layer_name] = tiles.Tiles(tile_layer_source)
+            self.add_url_rule(
+                "/<string:tile_layer>/<int:z>/<int:x>/<int:y>",
+                view_func=self.tile,
+                methods=("GET",),
+            )
 
     # TODO: implement etag matching
     @local_referer_only
-    def tile(self, z, x, y):
+    def tile(self, z, x, y, tile_layer):
         """Serve a vector tile."""
-        tile = self._tiles.tile(z, x, y)
-        if tile is None:
-            return flask.jsonify(error=f"Tile {z}/{x}/{y} not found."), 404
+        try:
+            tile = self._tiles[tile_layer].tile(z, x, y)
+            assert tile is not None
+        except (
+            AssertionError,  # tile not found
+            KeyError,  # layer not found
+        ):
+            response = (
+                flask.jsonify(
+                    error=f"Tile {z}/{x}/{y} of layer {tile_layer} not found."
+                ),
+                404,
+            )
         else:
-            return flask.Response(tile, mimetype="application/x-protobuf")
+            response = flask.Response(tile, mimetype="application/x-protobuf")
+        return response
