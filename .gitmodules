@@ -1,0 +1,9 @@
+[submodule "vendor/maplibre-gl-js"]
+	path = vendor/maplibre-gl-js
+	url = git@github.com:maplibre/maplibre-gl-js.git
+[submodule "vendor/bootstrap"]
+	path = vendor/bootstrap
+	url = git@github.com:twbs/bootstrap.git
+[submodule "vendor/bootstrap-icons"]
+	path = vendor/bootstrap-icons
+	url = git@github.com:twbs/icons.git
