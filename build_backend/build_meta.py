@@ -43,7 +43,6 @@ from setuptools.build_meta import *  # noqa: F401, F403
 BUILD_REQUIREMENTS = [
     "libsass",
     "nodejs-bin",
-    "rcssmin",
 ]
 
 
@@ -83,27 +82,11 @@ def _assert_babeljs_available():
 @functools.cache
 def _compile_maplibre_gl_js():
     import nodejs
-    import rcssmin
 
     with WorkingDirectory("vendor/maplibre-gl-js"):
+        nodejs.npm.call(["install", "--global", "--force", "node@latest"])
         nodejs.npm.call(["ci"])
-        nodejs.npm.call(["run", "build_dist"])
-
-    _assert_babeljs_available()
-    nodejs.npx.run(
-        ["babel"]
-        + ["vendor/maplibre-gl-js/dist/maplibre-gl.js"]
-        + ["--presets", "minify"]
-        + ["--out-file", "vendor/maplibre-gl-js/dist/maplibre-gl.min.js"]
-    )
-
-    with pathlib.Path("vendor/maplibre-gl-js/dist/maplibre-gl.min.css").open("w") as f:
-        f.write(
-            rcssmin.cssmin(
-                pathlib.Path("vendor/maplibre-gl-js/dist/maplibre-gl.css").read_text()
-            )
-        )
-    return True
+        nodejs.npm.call(["run", "build-dist"])
 
 
 def _compile_sass_file(input_filename):

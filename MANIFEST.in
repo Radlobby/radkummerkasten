@@ -1,4 +1,5 @@
-recursive-include src/**/static *.min.css *.min.js *.min.js.map *.html
+recursive-include src/**/static *.min.css *.min.js *.min.js.map *.svg *.png *.jpg *.wepb *.webmanifest *.woff2
+recursive-include src/**/templates *.html
 recursive-include tests *.py
 recursive-include tests/data *
 global-exclude *.pyc

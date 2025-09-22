@@ -18,6 +18,7 @@ class Radkummerkasten(flask.Blueprint):
     _IMPORT_NAME = __name__
     _kwargs = {
         "url_prefix": "/",
+        "template_folder": "templates",
     }
 
     def __init__(self, *args, **kwargs):
