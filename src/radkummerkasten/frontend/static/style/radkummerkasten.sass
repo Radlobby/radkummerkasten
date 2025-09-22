@@ -1,0 +1,158 @@
+@use "sass:map"
+
+@import "./bootstrap-functions"
+
+// override default variables here
+
+$indigo:  #6610f2
+$indigo-700: shade-color($indigo, 40%)
+$indigo-400: tint-color($indigo, 20%)
+$link-color: $indigo-700
+$link-decoration: underline 0.25rem rgba(0, 133, 242, 0.25)
+$link-hover-decoration: underline 0.25rem rgba(0, 133, 242, 0.15)
+
+$primary: $indigo-400
+
+
+@import "./bootstrap-variables"
+
+// override default maps here
+
+$additional-theme-colors: ("project-type": $blue-600, "topic-area": $yellow-200,
+"project-duration": $pink-600)
+$theme-colors: map-merge($theme-colors, $additional-theme-colors)
+
+$body-color-dark: $gray-200
+$body-bg-dark: #141515
+$body-bg: #f5fcf7
+$dark-bg-subtle: $gray-700
+
+
+@import "./typography"
+
+@import "./bootstrap-core"
+@import "./bootstrap-extra"
+
+
+//@import "./bootstrap-icons"
+@import "./icons"
+
+
+button.navbar-toggler
+    background-color: var(--bs-body-bg)
+    text-align: left
+
+footer
+    a
+        text-decoration: none
+        color: rgba(var(--bs-light-rgb), var(--bs-text-opacity)) !important
+        //position: static
+
+        &:hover
+            text-decoration: underline
+
+        &.u-key
+            font-size: 75%
+
+    div.name-email, div.social-links, div.source-repositories
+        margin-bottom: 1rem
+
+        div
+          margin-bottom: 0.1rem
+
+    .icon::before
+        // -> rgba(var(--bs-light-rgb), var(--bs-text-opacity))
+        filter: invert(98%) sepia(11%) saturate(207%) hue-rotate(175deg) brightness(100%) contrast(97%)
+
+        height: 16px
+        width: 16px
+        background-size: 16px
+
+        position: relative
+        top: 3px
+        margin-right: 0.2rem
+
+    .statistics
+        font-size: 75%
+
+header.navbar
+    background-color: var(--bs-body-bg)
+
+.navbar-toggler:focus
+    box-shadow: none
+
+p
+    .lead
+        font-size: 1.15rem
+
+section#introduction
+    margin-top: calc(12vW + 1rem)
+    margin-bottom: calc(3vW + 1rem)
+
+    h1
+        font-size: calc(1.375rem + 1vW)
+        font-weight: 630
+        margin-left: -0.2rem
+    p
+        em, span
+            display: inline-block
+
+    p:first-child
+        margin-left: -0.1rem
+
+    p.lead
+        font-weight: 500
+
+.nav-underline
+    .nav-link:active
+        font-weight: normal
+        color: inherit
+        border-bottom-color: transparent
+
+    .nav-link:hover
+        text-decoration: none !important
+
+section#projects
+    h3
+        font-size: 1.25rem
+        margin-bottom: 0
+
+        span.badge
+            font-size: 0.7rem
+            font-weight: 500
+            vertical-align: top
+
+            margin-top: 0.2rem
+            margin-bottom: 0.5rem
+
+    p + h3
+        margin-top: 1.75rem
+
+section#short-cv
+    dl
+        dd
+            margin-bottom: 1rem
+
+section
+    dl.years
+        dt.col-md-1
+            font-size: 0.9rem
+            line-height: 1.5rem
+
+        ul
+            list-style: none
+            padding: 0
+
+    h2
+        padding-top: 4rem !important
+
+    p
+        hyphens: auto
+
+strong
+    font-weight: 600 !important
+
+/* https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/Heading_Elements#specifying_a_uniform_font_size_for_h1 */
+h1
+    margin-block: 0.67em
+    font-size: 2em

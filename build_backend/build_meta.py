@@ -29,6 +29,7 @@ ecmascript_files = ["src/radkummerkasten/frontend/static/radkummerkasten.js"]
 
 
 import functools
+import os
 import pathlib
 
 try:
@@ -42,7 +43,26 @@ from setuptools.build_meta import *  # noqa: F401, F403
 BUILD_REQUIREMENTS = [
     "libsass",
     "nodejs-bin",
+    "rcssmin",
 ]
+
+
+class WorkingDirectory:
+    """Context manager to change working directory."""
+
+    def __init__(self, working_directory):
+        """Context manager to change working directory."""
+        self._working_directory = pathlib.Path(working_directory)
+
+    def __enter__(self):
+        """Continue working in a new directory."""
+        self._original_working_directory = pathlib.Path.cwd()
+        os.chdir(self._working_directory)
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        """Return to the original working directory."""
+        os.chdir(self._original_working_directory)
 
 
 @functools.cache
@@ -57,6 +77,32 @@ def _assert_babeljs_available():
             "babel-preset-minify",
         ]
     )
+    return True
+
+
+@functools.cache
+def _compile_maplibre_gl_js():
+    import nodejs
+    import rcssmin
+
+    with WorkingDirectory("vendor/maplibre-gl-js"):
+        nodejs.npm.call(["ci"])
+        nodejs.npm.call(["run", "build_dist"])
+
+    _assert_babeljs_available()
+    nodejs.npx.run(
+        ["babel"]
+        + ["vendor/maplibre-gl-js/dist/maplibre-gl.js"]
+        + ["--presets", "minify"]
+        + ["--out-file", "vendor/maplibre-gl-js/dist/maplibre-gl.min.js"]
+    )
+
+    with pathlib.Path("vendor/maplibre-gl-js/dist/maplibre-gl.min.css").open("w") as f:
+        f.write(
+            rcssmin.cssmin(
+                pathlib.Path("vendor/maplibre-gl-js/dist/maplibre-gl.css").read_text()
+            )
+        )
     return True
 
 
@@ -123,6 +169,17 @@ def build_ecmascript(f):
     return wrapper
 
 
+def build_maplibre_gl_js(f):
+    """Decorate a function to compile maplibre-gl-js before function."""
+
+    def wrapper(*args, **kwargs):
+        _compile_maplibre_gl_js()
+        results = f(*args, **kwargs)
+        return results
+
+    return wrapper
+
+
 def build_sass(f):
     """Decorate a function to compile SASS->CSS before function."""
 
@@ -148,6 +205,7 @@ def build_editable(wheel_directory, config_settings=None, metadata_directory=Non
 
 @build_ecmascript
 @build_sass
+@build_maplibre_gl_js
 def build_sdist(sdist_directory, config_settings=None):
     """Override setuptools.build_meta also compile SASS and JS files."""
     return setuptools.build_meta.build_sdist(sdist_directory, config_settings)
@@ -155,6 +213,7 @@ def build_sdist(sdist_directory, config_settings=None):
 
 @build_ecmascript
 @build_sass
+@build_maplibre_gl_js
 def build_wheel(wheel_directory, config_settings=None, metadata_directory=None):
     """Override setuptools.build_meta to also compile SASS and JS files."""
     return setuptools.build_meta.build_wheel(

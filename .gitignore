@@ -37,3 +37,7 @@ junit.xml
 .pytest_cache
 
 /instance
+
+/node_modules
+/package.json
+/package-lock.json

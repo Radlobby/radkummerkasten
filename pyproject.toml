@@ -66,14 +66,14 @@ exclude_also = [
 ]
 
 [tool.flake8]
-exclude = ["build", "dist", "docs/conf.py", ".virtualenv"]
+exclude = ["build", "dist", "docs/conf.py", "vendor", ".virtualenv"]
 extent-ignore = ["E203", "E501", "E701"]
 extent-select = ["B950"]
 max-line-length = 88
 
 [tool.isort]
 profile = "black"
-skip = ["build", "dist", "docs/conf.py", ".virtualenv"]
+skip = ["build", "dist", "docs/conf.py", "vendor", ".virtualenv"]
 
 [tools.pylintrc]
 good-names = ["i", "j", "k", "e", "ex", "id", "Run", "_"]
@@ -84,8 +84,8 @@ addopts = "-p no:faulthandler --cov=radkummerkasten --cov-report term-missing --
 testpaths = ["tests"]
 
 [tools.radkummerkasten-build-backend]
-sass_files = ["src/radkummerkasten/frontend/static/assets/radkummerkasten.sass"]
-ecmascript_files = ["src/radkummerkasten/frontend/static/assets/radkummerkasten.js"]
+sass_files = ["src/radkummerkasten/frontend/static/style/radkummerkasten.sass"]
+ecmascript_files = ["src/radkummerkasten/frontend/static/script/radkummerkasten.js"]
 
 [tool.setuptools.dynamic]
 version = {attr = "radkummerkasten.__version__"}
