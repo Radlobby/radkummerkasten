@@ -42,7 +42,7 @@ dev = ["black", "flake8", "flake8-bugbear", "flake8-pyproject", "isort",
        "pydocstyle", "pylint"]
 docs = ["sphinx", "sphinx-book-theme", "sphinx-design",
         "sphinxcontrib-bibtex", "sphinxcontrib-images"]
-tests = ["pytest", "pytest-cov", "pytest-lazy-fixtures"]
+tests = ["pytest", "pytest-cov", "pytest-flask"]
 
 
 [project.urls]
