@@ -42,7 +42,7 @@ from setuptools.build_meta import *  # noqa: F401, F403
 
 BUILD_REQUIREMENTS = [
     "libsass",
-    "nodejs-bin@git+https://github.com/christophfink/nodejs-pypi.git@v24.9.0"
+    "nodejs-bin@git+https://github.com/christophfink/nodejs-pypi.git@v24.9.0",
 ]
 
 

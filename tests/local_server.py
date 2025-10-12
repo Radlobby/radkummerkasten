@@ -16,6 +16,7 @@ __all__ = ["LocalServer"]
 
 class _LocalServer(threading.Thread):
     """A locally listening local flask server for testing."""
+
     def __init__(
         self,
         application,
@@ -63,13 +64,11 @@ class LocalServer(threading.Thread):
             application to start
         """
         super().__init__()
-        self.application = application
+        self.server = _LocalServer(application, self.host, self.port)
 
     def __enter__(self):
         """Provide a context manager for LocalServer."""
-        self.server = _LocalServer(self.application, self.host, self.port)
         self.server.start()
-        print(self)
         return self.url
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -80,9 +79,7 @@ class LocalServer(threading.Thread):
     def port(self):
         """Find an available port."""
         # https://stackoverflow.com/a/45690594
-        with contextlib.closing(
-            socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        ) as s:
+        with contextlib.closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as s:
             s.bind((self.host, 0))
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             return s.getsockname()[1]
@@ -93,4 +90,5 @@ class LocalServer(threading.Thread):
 
     @property
     def url(self):
+        """Return the URL we are listening on."""
         return f"http://{self.host}:{self.port}/"
