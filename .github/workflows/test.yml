@@ -40,7 +40,9 @@ jobs:
           - '3.9'
 
     steps:
-      - run: sudo apt update && sudo apt install firefox xvfb
+
+      - if: ${{ matrix.os == "ubuntu-latest" }} 
+        run: sudo apt update && sudo apt install firefox xvfb
 
       - uses: actions/checkout@v4
         with:
