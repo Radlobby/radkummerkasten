@@ -71,15 +71,18 @@ def runner(application):
 @pytest.fixture(scope="class")
 def webdriver():
     """Provide a selenium/gecko webdriver."""
-    import selenium.webdriver
+    try:
+        import selenium.webdriver
 
-    options = selenium.webdriver.FirefoxOptions()
-    options.add_argument("--headless=new")
-    driver = selenium.webdriver.Firefox(options)
+        options = selenium.webdriver.FirefoxOptions()
+        options.add_argument("--headless=new")
+        driver = selenium.webdriver.Firefox(options)
 
-    yield driver
+        yield driver
 
-    driver.quit()
+        driver.quit()
+    except ImportError:
+        yield None
 
 
 @pytest.fixture(scope="session")

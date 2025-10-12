@@ -1,25 +1,20 @@
 #!/usr/bin/env python
 
 
+"""Browser testing."""
+
+
 import functools
 
 import pytest
+import pytest_lazy_fixtures
 
 
 @functools.cache
 def is_selenium_installed():
     """Test whether we can use selenium+firefox."""
-    try:
-        import selenium.webdriver
-
-        options = selenium.webdriver.FirefoxOptions()
-        options.add_argument("--headless=new")
-        driver = selenium.webdriver.Firefox(options)
-        driver.quit()
-        selenium_installed = True
-    except ImportError:
-        selenium_installed = False
-    return selenium_installed
+    webdriver = pytest_lazy_fixtures.lf("webdriver")
+    return webdriver is not None
 
 
 @pytest.mark.skipif(
