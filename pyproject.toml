@@ -42,7 +42,7 @@ dev = ["black", "flake8", "flake8-bugbear", "flake8-pyproject", "isort",
        "pydocstyle", "pylint"]
 docs = ["sphinx", "sphinx-book-theme", "sphinx-design",
         "sphinxcontrib-bibtex", "sphinxcontrib-images"]
-tests = ["pytest", "pytest-cov", "pytest-flask"]
+tests = ["pytest", "pytest-cov", "requests", "selenium", "werkzeug"]
 
 
 [project.urls]
@@ -66,16 +66,19 @@ exclude_also = [
 ]
 
 [tool.flake8]
-exclude = ["build", "dist", "docs/conf.py", "vendor", ".virtualenv"]
+exclude = ["build", "dist", "docs/conf.py", "node_modules", "vendor", ".virtualenv"]
 extent-ignore = ["E203", "E501", "E701"]
 extent-select = ["B950"]
 max-line-length = 88
 
 [tool.isort]
 profile = "black"
-skip = ["build", "dist", "docs/conf.py", "vendor", ".virtualenv"]
+skip = ["build", "dist", "docs/conf.py", "node_modules", "vendor", ".virtualenv"]
 
-[tools.pylintrc]
+[tool.pydocstyle]
+#match-dir = "^(src|tests|build_backend).*"
+
+[tool.pylintrc]
 good-names = ["i", "j", "k", "e", "ex", "id", "Run", "_"]
 max-line-length = 88
 
