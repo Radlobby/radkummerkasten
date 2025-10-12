@@ -42,7 +42,7 @@ from setuptools.build_meta import *  # noqa: F401, F403
 
 BUILD_REQUIREMENTS = [
     "libsass",
-    "nodejs-bin",
+    "nodejs-bin@git+https://github.com/christophfink/nodejs-pypi.git@v24.9.0"
 ]
 
 
@@ -52,6 +52,7 @@ class WorkingDirectory:
     def __init__(self, working_directory):
         """Context manager to change working directory."""
         self._working_directory = pathlib.Path(working_directory)
+        self._original_working_directory = None
 
     def __enter__(self):
         """Continue working in a new directory."""
@@ -69,12 +70,10 @@ def _assert_babeljs_available():
     import nodejs
 
     nodejs.npm.call(
-        [
-            "install",
-            "@babel/core",
-            "@babel/cli",
-            "babel-preset-minify",
-        ]
+        "install",
+        "@babel/core",
+        "@babel/cli",
+        "babel-preset-minify",
     )
     return True
 
@@ -84,9 +83,8 @@ def _compile_maplibre_gl_js():
     import nodejs
 
     with WorkingDirectory("vendor/maplibre-gl-js"):
-        nodejs.npm.call(["install", "--global", "--force", "node@latest"])
-        nodejs.npm.call(["ci"])
-        nodejs.npm.call(["run", "build-dist"])
+        nodejs.npm.call("ci")
+        nodejs.npm.call("run", "build-dist")
 
 
 def _compile_sass_file(input_filename):
