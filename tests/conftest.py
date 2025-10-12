@@ -11,6 +11,8 @@ import pytest
 
 import radkummerkasten
 
+from .local_server import LocalServer
+
 SOME_ONLINE_FILE_URL = (
     "https://github.com/christophfink/radkummerkasten.at/blob/main/LICENSE"
 )
@@ -54,9 +56,10 @@ def expected_tile_pbf(request, test_data_directory):
 
 
 @pytest.fixture(scope="class")
-def live_server_url()
+def local_server_url(application):
     """Start a listening server and return the base URL."""
-    raise NotImplementedError("TODO")
+    with LocalServer(application) as url:
+        yield url
 
 
 @pytest.fixture(scope="session")
@@ -65,25 +68,11 @@ def runner(application):
     return application.test_cli_runner()
 
 
-@pytest.fixture(scope="session")
-def is_selenium_installed():
-    """Test whether we can use selenium+firefox."""
-    try:
-        import selenium.webdriver
-        options = selenium.webdriver.FirefoxOptions()
-        options.add_argument("--headless=new")
-        driver = selenium.webdriver.Firefox(options)
-        driver.quit()
-        selenium_installed = True
-    except ImportError:
-        selenium_installed = False
-    return selenium_installed
-
-
 @pytest.fixture(scope="class")
 def webdriver():
     """Provide a selenium/gecko webdriver."""
     import selenium.webdriver
+
     options = selenium.webdriver.FirefoxOptions()
     options.add_argument("--headless=new")
     driver = selenium.webdriver.Firefox(options)
