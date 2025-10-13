@@ -25,6 +25,7 @@ jobs:
     name: Run tests (${{ matrix.os }}, Python ${{ matrix.python_version }}
     needs: lint
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.os == 'ubuntu-latest' && 'selenium/standalone-firefox' || '' }}
     strategy:
       fail-fast: false
       matrix:
@@ -41,8 +42,8 @@ jobs:
 
     steps:
 
-      - run: sudo apt update && sudo apt install firefox xvfb
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+      #- run: sudo apt update && sudo apt install firefox xvfb
+      #  if: ${{ matrix.os == 'ubuntu-latest' }}
 
       - uses: actions/checkout@v4
         with:
