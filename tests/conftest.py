@@ -11,6 +11,8 @@ import pytest
 
 import radkummerkasten
 
+from .local_server import LocalServer
+
 SOME_ONLINE_FILE_URL = (
     "https://github.com/christophfink/radkummerkasten.at/blob/main/LICENSE"
 )
@@ -53,10 +55,34 @@ def expected_tile_pbf(request, test_data_directory):
     return tile_pbf
 
 
+@pytest.fixture(scope="class")
+def local_server_url(application):
+    """Start a listening server and return the base URL."""
+    with LocalServer(application) as url:
+        yield url
+
+
 @pytest.fixture(scope="session")
 def runner(application):
     """Provide a cli runner for the tests."""
     return application.test_cli_runner()
+
+
+@pytest.fixture(scope="class")
+def webdriver():
+    """Provide a selenium/gecko webdriver."""
+    try:
+        import selenium.webdriver
+
+        options = selenium.webdriver.FirefoxOptions()
+        options.add_argument("--headless=new")
+        driver = selenium.webdriver.Firefox(options)
+
+        yield driver
+
+        driver.quit()
+    except ImportError:
+        yield None
 
 
 @pytest.fixture(scope="session")
