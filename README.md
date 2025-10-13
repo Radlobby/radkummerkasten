@@ -35,8 +35,8 @@ This work is licensed under GNU General Public License v3.0.
 [rtd-status-badge]: https://readthedocs.org/projects/radkummerkasten/badge/?version=stable
 [rtd-status-link]: https://radkummerkasten.readthedocs.io/
 [stable-version-badge]: https://img.shields.io/pypi/v/radkummerkasten?label=Stable
-[stable-version-link]: https://github.com/radlobby/radkummerkasten.at/releases
-[test-status-badge]: https://github.com/radlobby/radkummerkasten.at/actions/workflows/test.yml/badge.svg
-[test-status-link]: https://github.com/radlobby/radkummerkasten.at/actions/workflows/test.yml
+[stable-version-link]: https://github.com/radlobby/radkummerkasten/releases
+[test-status-badge]: https://github.com/radlobby/radkummerkasten/actions/workflows/test.yml/badge.svg
+[test-status-link]: https://github.com/radlobby/radkummerkasten/actions/workflows/test.yml
 
 <!-- (2) other links -->
