@@ -38,17 +38,18 @@ class Test_Address:
                     "error": "Address not found",
                 },
             ),
-            # Gemeinde ohne Straßennamen
-            (
-                13.2021693,
-                46.9346755,
-                {
-                    "street": "Obervellach",
-                    "housenumber": "77",
-                    "postcode": "9821",
-                    "city": "Obervellach",
-                },
-            ),
+            # test datensatz deckt nur wien ab
+            # # Gemeinde ohne Straßennamen
+            # (
+            #     13.2021693,
+            #     46.9346755,
+            #     {
+            #         "street": "Obervellach",
+            #         "housenumber": "77",
+            #         "postcode": "9821",
+            #         "city": "Obervellach",
+            #     },
+            # ),
         ],
     )
     def test_address_by_coordinates(self, lon, lat, expected_address, client):

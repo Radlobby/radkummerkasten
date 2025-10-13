@@ -4,18 +4,11 @@
 """Look up the closest street address for a pair of coordinates."""
 
 
+import os
+
 import geopandas
+import pathlib
 import shapely
-
-from ..utilities import RemotePath
-
-# TODO: move to config
-VORONOI_POLYGONS = RemotePath(
-    "https://christophfink.github.io"
-    "/austrian-addresses"
-    "/austrian-addresses-voronoi.gpkg.zip"
-)
-RANDOM_POINT = shapely.Point(16, 48)
 
 
 __all__ = [
@@ -23,26 +16,22 @@ __all__ = [
 ]
 
 
+# Increase cache for faster sindex lookup
+os.environ["OGR_SQLITE_CACHE"] = "128"
+
+
 class AddressLookup:
     """Look up an address."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, voronoi_polygons):
         """Look up an address."""
-        self._data = geopandas.read_file(VORONOI_POLYGONS)
-
-        # look up one point to prime spatial index
-        _ = self._data.sindex.query(RANDOM_POINT)
+        self.voronoi_polygons = pathlib.Path(voronoi_polygons).resolve()
 
     def lookup_address(self, lon, lat):
         """Look up an address from a pair of coordinates."""
         point = shapely.Point(lon, lat)
         try:
-            record = self._data[["city", "postcode", "street", "housenumber"]].loc[
-                self._data.sindex.query(
-                    point,
-                    predicate="within",
-                )[0]
-            ]
+            record = geopandas.read_file(self.voronoi_polygons, mask=point, rows=1).iloc[0]
 
             address = {
                 "city": record["city"],
