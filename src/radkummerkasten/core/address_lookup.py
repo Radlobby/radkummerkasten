@@ -5,11 +5,10 @@
 
 
 import os
+import pathlib
 
 import geopandas
-import pathlib
 import shapely
-
 
 __all__ = [
     "AddressLookup",
@@ -31,7 +30,9 @@ class AddressLookup:
         """Look up an address from a pair of coordinates."""
         point = shapely.Point(lon, lat)
         try:
-            record = geopandas.read_file(self.voronoi_polygons, mask=point, rows=1).iloc[0]
+            record = geopandas.read_file(
+                self.voronoi_polygons, mask=point, rows=1
+            ).iloc[0]
 
             address = {
                 "city": record["city"],
