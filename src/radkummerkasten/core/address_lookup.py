@@ -22,16 +22,38 @@ os.environ["OGR_SQLITE_CACHE"] = "128"
 class AddressLookup:
     """Look up an address."""
 
-    def __init__(self, voronoi_polygons):
-        """Look up an address."""
-        self.voronoi_polygons = pathlib.Path(voronoi_polygons).resolve()
+    def __init__(self, data):
+        """
+        Create a simple gazetteer to look up addresses.
+
+        Arguments
+        ---------
+        data : pathlib.Path
+            path to a GPKG of Voronoi polygons around house numbers
+        """
+        # TODO: Add specific instructions on how to structure the voronoi data
+        # file, possibly including sample code
+        self.data = pathlib.Path(data).resolve()
 
     def lookup_address(self, lon, lat):
-        """Look up an address from a pair of coordinates."""
+        """
+        Look up an address from a pair of coordinates.
+
+        Arguments
+        ---------
+        lon : float
+            Longitude value of point coordinate for which to look up an
+            address. (EPSG:4326)
+        lat : float
+            Latitude value of point coordinate for which to look up an address
+            (EPSG:4326)
+        """
         point = shapely.Point(lon, lat)
         try:
             record = geopandas.read_file(
-                self.voronoi_polygons, mask=point, rows=1
+                self.data,
+                mask=point,
+                rows=1,
             ).iloc[0]
 
             address = {

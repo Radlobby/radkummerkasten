@@ -5,9 +5,7 @@
 
 
 from . import decorators
-from .remote_path import RemotePath
 
 __all__ = [
     "decorators",
-    "RemotePath",
 ]

@@ -13,4 +13,4 @@ TILE_LAYERS = {
     "radlkarte": _DATA_DIR / "radlkarte-wien.geojson",
 }
 
-ADDRESS_LOOKUP_LAYER = _DATA_DIR / "addressen-wien-voronoi.gpkg.zip"
+ADDRESS_LOOKUP_LAYER = _DATA_DIR / "austrian-addresses-voronoi.gpkg.zip"
