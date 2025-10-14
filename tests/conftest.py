@@ -30,7 +30,7 @@ def application(test_instance_directory):
 
 
 @pytest.fixture(scope="session")
-def application_without_tile_layers():
+def application_with_empty_config():
     """Start a flask application."""
     with tempfile.TemporaryDirectory() as instance_path:
         os.environ["TESTING"] = "TRUE"

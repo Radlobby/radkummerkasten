@@ -4,45 +4,57 @@
 """Look up the closest street address for a pair of coordinates."""
 
 
+import os
+import pathlib
+
 import geopandas
 import shapely
-
-from ..utilities import RemotePath
-
-# TODO: move to config
-VORONOI_POLYGONS = RemotePath(
-    "https://christophfink.github.io"
-    "/austrian-addresses"
-    "/austrian-addresses-voronoi.gpkg.zip"
-)
-RANDOM_POINT = shapely.Point(16, 48)
-
 
 __all__ = [
     "AddressLookup",
 ]
 
 
+# Increase cache for faster sindex lookup
+os.environ["OGR_SQLITE_CACHE"] = "128"
+
+
 class AddressLookup:
     """Look up an address."""
 
-    def __init__(self, *args, **kwargs):
-        """Look up an address."""
-        self._data = geopandas.read_file(VORONOI_POLYGONS)
+    def __init__(self, data):
+        """
+        Create a simple gazetteer to look up addresses.
 
-        # look up one point to prime spatial index
-        _ = self._data.sindex.query(RANDOM_POINT)
+        Arguments
+        ---------
+        data : pathlib.Path
+            path to a GPKG of Voronoi polygons around house numbers
+        """
+        # TODO: Add specific instructions on how to structure the voronoi data
+        # file, possibly including sample code
+        self.data = pathlib.Path(data).resolve()
 
     def lookup_address(self, lon, lat):
-        """Look up an address from a pair of coordinates."""
+        """
+        Look up an address from a pair of coordinates.
+
+        Arguments
+        ---------
+        lon : float
+            Longitude value of point coordinate for which to look up an
+            address. (EPSG:4326)
+        lat : float
+            Latitude value of point coordinate for which to look up an address
+            (EPSG:4326)
+        """
         point = shapely.Point(lon, lat)
         try:
-            record = self._data[["city", "postcode", "street", "housenumber"]].loc[
-                self._data.sindex.query(
-                    point,
-                    predicate="within",
-                )[0]
-            ]
+            record = geopandas.read_file(
+                self.data,
+                mask=point,
+                rows=1,
+            ).iloc[0]
 
             address = {
                 "city": record["city"],

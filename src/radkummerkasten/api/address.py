@@ -23,13 +23,17 @@ class Address(flask.Blueprint):
         "url_prefix": "/address",
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, configuration, *args, **kwargs):
         """Provide a blueprint for address lookup."""
         kwargs = kwargs or {}
         kwargs.update(self._kwargs)
         super().__init__(self._NAME, self._IMPORT_NAME, *args, **kwargs)
 
-        self._address_lookup = AddressLookup()
+        try:
+            self._address_lookup = AddressLookup(configuration["ADDRESS_LOOKUP_LAYER"])
+        except KeyError:
+            self._address_lookup = None
+
         self.add_url_rule(
             "/by-coordinates/<float:lon>,<float:lat>",
             view_func=self.look_up_address,
@@ -39,5 +43,8 @@ class Address(flask.Blueprint):
     @local_referer_only
     def look_up_address(self, lon, lat):
         """Look up an address from a pair of coordinates."""
-        address = self._address_lookup.lookup_address(lon, lat)
+        if self._address_lookup is None:
+            address = {"error": "Address not found"}
+        else:
+            address = self._address_lookup.lookup_address(lon, lat)
         return flask.jsonify(address)
