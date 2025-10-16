@@ -6,7 +6,7 @@
 
 import pathlib
 
-_DATA_DIR = pathlib.Path(__file__).parent.resolve()
+_DATA_DIR = pathlib.Path(__file__).parent.resolve() / "data"
 
 
 TILE_LAYERS = {
