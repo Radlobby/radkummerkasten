@@ -13,9 +13,6 @@ import radkummerkasten
 
 from .local_server import LocalServer
 
-SOME_ONLINE_FILE_URL = (
-    "https://github.com/christophfink/radkummerkasten.at/blob/main/LICENSE"
-)
 TEST_DATA_DIRECTORY = (pathlib.Path(__file__).parent / "data").absolute()
 TEST_INSTANCE_DIRECTORY = (pathlib.Path(__file__).parent / "instance").absolute()
 
@@ -55,6 +52,12 @@ def expected_tile_pbf(request, test_data_directory):
     return tile_pbf
 
 
+@pytest.fixture(scope="function")
+def expected_tile_json(request, test_data_directory):
+    """Read the expected content of a vector tile from disk."""
+    return pathlib.Path(test_data_directory / f"{request.param}.tilejson").read_text()
+
+
 @pytest.fixture(scope="class")
 def local_server_url(application):
     """Start a listening server and return the base URL."""
@@ -83,12 +86,6 @@ def webdriver():
         driver.quit()
     except ImportError:
         yield None
-
-
-@pytest.fixture(scope="session")
-def some_online_file_url():
-    """Return the URL of a random online file."""
-    yield SOME_ONLINE_FILE_URL
 
 
 @pytest.fixture(scope="session")

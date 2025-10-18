@@ -46,7 +46,7 @@ class Test_Tiles:
                 25485,
                 3673,
                 "radlkarte-15-25485-3673",
-                404,
+                200,
             ),
             (
                 "non-existing",
@@ -65,6 +65,28 @@ class Test_Tiles:
         response = client.get(f"/tiles/{layer}/{z}/{x}/{y}")
         assert response.status_code == expected_http_status
         assert response.get_data() == expected_tile_pbf
+
+
+    @pytest.mark.parametrize(
+        ("layer", "expected_tile_json", "expected_http_status"),
+        [
+            (
+                "radlkarte",
+                "radlkarte",
+                200,
+            ),
+            (
+                "non-existing",
+                "non-existing",
+                404,
+            ),
+        ],
+        indirect=["expected_tile_json"],
+    )
+    def test_tilejson(self, client, layer, expected_tile_json, expected_http_status):
+        response = client.get(f"/tiles/{layer}")
+        assert response.status_code == expected_http_status
+        assert response.text == expected_tile_json
 
     def test_without_tile_layers(self, application_with_empty_config):
         client = application_with_empty_config.test_client()
