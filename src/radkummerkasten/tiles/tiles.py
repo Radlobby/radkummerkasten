@@ -34,12 +34,19 @@ class Tiles(flask.Blueprint):
         except KeyError:
             tile_layers = {}
 
-        self._tiles = {}
+        self.tile_layers = {}
         for tile_layer_name, tile_layer_source in tile_layers.items():
-            self._tiles[tile_layer_name] = tiles.Tiles(tile_layer_source)
+            self.tile_layers[tile_layer_name] = tiles.Tiles(
+                tile_layer_source, tile_layer_name
+            )
             self.add_url_rule(
                 "/<string:tile_layer>/<int:z>/<int:x>/<int:y>",
                 view_func=self.tile,
+                methods=("GET",),
+            )
+            self.add_url_rule(
+                "/<string:tile_layer>",
+                view_func=self.tilejson,
                 methods=("GET",),
             )
 
@@ -48,18 +55,29 @@ class Tiles(flask.Blueprint):
     def tile(self, z, x, y, tile_layer):
         """Serve a vector tile."""
         try:
-            tile = self._tiles[tile_layer].tile(z, x, y)
-            assert tile is not None
-        except (
-            AssertionError,  # tile not found
-            KeyError,  # layer not found
-        ):
+            tile = self.tile_layers[tile_layer].tile(z, x, y)
+        except KeyError:
             response = (
                 flask.jsonify(
-                    error=f"Tile {z}/{x}/{y} of layer {tile_layer} not found."
+                    error=f"Tile layer {tile_layer} not found."
                 ),
                 404,
             )
         else:
             response = flask.Response(tile, mimetype="application/x-protobuf")
+        return response
+
+    # TODO: implement etag matching
+    @local_referer_only
+    def tilejson(self, tile_layer):
+        """Serve the metadata about a tile layer."""
+        try:
+            tilejson = self.tile_layers[tile_layer].tilejson
+        except KeyError:
+            response = (
+                flask.jsonify(error=f"Tile layer {tile_layer} not found."),
+                404,
+            )
+        else:
+            response = flask.jsonify(tilejson)
         return response

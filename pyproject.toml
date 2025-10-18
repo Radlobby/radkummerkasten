@@ -88,7 +88,10 @@ testpaths = ["tests"]
 
 [tools.radkummerkasten-build-backend]
 sass_files = ["src/radkummerkasten/frontend/static/style/radkummerkasten.sass"]
-ecmascript_files = ["src/radkummerkasten/frontend/static/script/radkummerkasten.js"]
+ecmascript_files = [
+    "src/radkummerkasten/frontend/static/script/radkummerkasten-map.js",
+    "src/radkummerkasten/frontend/static/script/radkummerkasten.js",
+]
 
 [tool.setuptools.dynamic]
 version = {attr = "radkummerkasten.__version__"}

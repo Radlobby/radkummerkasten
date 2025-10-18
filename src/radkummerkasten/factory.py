@@ -5,6 +5,7 @@
 
 
 import os
+import pathlib
 
 import flask
 
@@ -17,6 +18,7 @@ __all__ = [
 
 def create_app(package_name, instance_path=None):
     """Create a radkummerkasten application."""
+    instance_path = pathlib.Path(instance_path).resolve()
     application = flask.Flask(
         package_name,
         instance_path=f"{instance_path}",
