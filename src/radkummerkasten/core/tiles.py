@@ -17,7 +17,7 @@ __all__ = [
 ]
 
 
-EMPTY_TILE = vt2pbf({"features":[]})
+EMPTY_TILE = vt2pbf({"features": []})
 
 
 class Tiles:

@@ -58,9 +58,7 @@ class Tiles(flask.Blueprint):
             tile = self.tile_layers[tile_layer].tile(z, x, y)
         except KeyError:
             response = (
-                flask.jsonify(
-                    error=f"Tile layer {tile_layer} not found."
-                ),
+                flask.jsonify(error=f"Tile layer {tile_layer} not found."),
                 404,
             )
         else:
