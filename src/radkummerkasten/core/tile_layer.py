@@ -13,14 +13,14 @@ from geojson2vt import geojson2vt
 from vt2pbf import vt2pbf
 
 __all__ = [
-    "Tiles",
+    "TileLayer",
 ]
 
 
 EMPTY_TILE = vt2pbf({"features": []})
 
 
-class Tiles:
+class TileLayer:
     """Compute vector tiles of a dataset for a zoom level and tile index."""
 
     def __init__(self, data, layer_name):

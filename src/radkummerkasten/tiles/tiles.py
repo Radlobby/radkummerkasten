@@ -6,7 +6,7 @@
 
 import flask
 
-from ..core import tiles
+from ..core import TileLayer
 from ..utilities.decorators import local_referer_only
 
 __all__ = [
@@ -36,7 +36,7 @@ class Tiles(flask.Blueprint):
 
         self.tile_layers = {}
         for tile_layer_name, tile_layer_source in tile_layers.items():
-            self.tile_layers[tile_layer_name] = tiles.Tiles(
+            self.tile_layers[tile_layer_name] = TileLayer(
                 tile_layer_source, tile_layer_name
             )
             self.add_url_rule(
