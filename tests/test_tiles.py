@@ -66,7 +66,6 @@ class Test_Tiles:
         assert response.status_code == expected_http_status
         assert response.get_data() == expected_tile_pbf
 
-
     @pytest.mark.parametrize(
         ("layer", "expected_tile_json", "expected_http_status"),
         [
