@@ -91,3 +91,15 @@ class Test_Tiles:
         client = application_with_empty_config.test_client()
         response = client.get("/tiles/layer/12/345/678")
         assert response.status_code == 404
+
+    def test_init_with_path(self, tile_layer_file):
+        from radkummerkasten.core.tiles import Tiles
+
+        _ = Tiles(tile_layer_file, tile_layer_file.stem)
+
+    def test_init_with_geodataframe(self, tile_layer_file):
+        import geopandas
+
+        from radkummerkasten.core.tiles import Tiles
+
+        _ = Tiles(geopandas.read_file(tile_layer_file), tile_layer_file.stem)
