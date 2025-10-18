@@ -6,4 +6,12 @@
 
     console.log("Radkummerkasten!")
 
+    document.addEventListener("DOMContentLoaded", function() {
+        var radkummerkasten = new R.Map({
+
+        })
+        window.radkummerkasten = radkummerkasten
+    })  
+
+
 })(window.R || (window.R = {}))
