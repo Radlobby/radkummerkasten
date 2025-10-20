@@ -14,11 +14,13 @@ authors = [
 
 dependencies = [
     "flask",
+    "geoalchemy2",
     "geojson2vt",
     "geopandas",
     "mercantile",
     "requests",
     "shapely",
+    "sqlalchemy",
     "vt2pbf",
     "werkzeug",
     "xdg-base-dirs; python_version > '3.9'",
