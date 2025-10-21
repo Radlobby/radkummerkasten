@@ -7,7 +7,7 @@
 import flask
 
 from ..core import TileLayer
-from ..utilities.decorators import local_referer_only
+from ..utilities.decorators import csp_allow_self, local_referer_only
 
 __all__ = [
     "Tiles",
@@ -20,7 +20,7 @@ class Tiles(flask.Blueprint):
     _NAME = "tiles"
     _IMPORT_NAME = __name__
     _kwargs = {
-        "url_prefix": "/",
+        "url_prefix": "/tiles",
     }
 
     def __init__(self, configuration, *args, **kwargs):
@@ -28,6 +28,8 @@ class Tiles(flask.Blueprint):
         kwargs = kwargs or {}
         kwargs.update(self._kwargs)
         super().__init__(self._NAME, self._IMPORT_NAME, *args, **kwargs)
+
+        self.configuration = configuration
 
         try:
             tile_layers = configuration["TILE_LAYERS"]
@@ -51,6 +53,7 @@ class Tiles(flask.Blueprint):
             )
 
     # TODO: implement etag matching
+    @csp_allow_self
     @local_referer_only
     def tile(self, z, x, y, tile_layer):
         """Serve a vector tile."""
@@ -66,6 +69,7 @@ class Tiles(flask.Blueprint):
         return response
 
     # TODO: implement etag matching
+    @csp_allow_self
     @local_referer_only
     def tilejson(self, tile_layer):
         """Serve the metadata about a tile layer."""

@@ -16,18 +16,20 @@ __all__ = [
 ]
 
 
-def create_app(package_name, instance_path=None):
+def create_app(package_name, instance_path, *args, **kwargs):
     """Create a radkummerkasten application."""
     instance_path = pathlib.Path(instance_path).resolve()
     application = flask.Flask(
         package_name,
+        *args,
         instance_path=f"{instance_path}",
         instance_relative_config=True,
+        **kwargs,
     )
 
     try:
         testing = os.environ["TESTING"]
-        if testing.lower() in ["false", "0", "off"]:
+        if testing.lower() in ["false", "0", "off", ""]:
             testing = False
         else:
             testing = bool(testing)
