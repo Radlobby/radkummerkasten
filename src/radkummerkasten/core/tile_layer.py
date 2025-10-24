@@ -3,21 +3,23 @@
 
 """Compute vector tiles of a dataset for a given zoom level and tile index."""
 
-import io
-import json
-import pathlib
+
+import functools
 
 import flask
 import geopandas
-from geojson2vt import geojson2vt
-from vt2pbf import vt2pbf
+import mercantile
+import shapely
+import vt2pbf
 
 __all__ = [
     "TileLayer",
 ]
 
 
-EMPTY_TILE = vt2pbf({"features": []})
+MAX_ZOOM = 24
+TILE_WIDTH = TILE_HEIGHT = 4096
+TILE_BUFFER = 64
 
 
 class TileLayer:
@@ -29,28 +31,25 @@ class TileLayer:
 
         Arguments
         ---------
-        data : geopandas.GeoDataFrame | pathlib.Path
-            the layer to serve
+        data : pathlib.Path
+            the layer to serve, in a format readable by geopandas.read_file,
+            preferrably containing a spatial index
         layer_name : str
             the name of this layer (included, e.g., in the tilejson metadata)
         """
         self.bounds = None
+        self.data = data
         self.layer_name = layer_name
-        self.tile_index = None
-        self.reload_data(data)
 
-    @staticmethod
-    def _geodataframe_to_geojson(gdf):
-        # The default implementation of geopandas.GeoDataFrame.to_json()
-        # always casts "id" to str, which is (a) weird and (b) not accepted by
-        # geojson2vt (weird, too).
-        #
-        # https://github.com/geopandas/geopandas/blob/
-        # 4f9f361a2ba94db4c02e1fb5b6b2b09abf4278e6/geopandas/geodataframe.py#L1166
-        buffer = io.BytesIO()
-        gdf.to_file(buffer, driver="GeoJSON")
-        buffer.seek(0)
-        return json.load(buffer)
+        self.EMPTY_TILE = vt2pbf.Tile().serialize_to_bytestring()
+
+        try:
+            data = geopandas.read_file(self.data)
+            self.bounds = [float(coordinate) for coordinate in data.total_bounds]
+            self.fields = [str(column_name) for column_name in data.columns]
+            del data
+        except Exception as exception:
+            raise RuntimeError(f"Could not open tile layer {self.data}.") from exception
 
     def tile(self, z, x, y):
         """
@@ -61,11 +60,47 @@ class TileLayer:
         x, y, z : int
             coordinates and zoom level of the tile requested
         """
-        tile = self.tile_index.get_tile(z, x, y)
-        if tile is None:
-            tile = EMPTY_TILE
+        # TODO: implement caching
+
+        bounds = mercantile.bounds(mercantile.Tile(x, y, z))
+        left, bottom, *_ = bounds
+        width = bounds[2] - bounds[0]
+        height = bounds[3] - bounds[1]
+
+        # Add a buffer that would be 64 units (of 4096 width) in the output pbf
+        mask = shapely.box(*bounds).buffer(width / (TILE_HEIGHT / TILE_BUFFER))
+
+        features = geopandas.read_file(self.data, mask=mask).clip(mask)
+
+        if len(features) > 0:
+            # make sure we don’t have multigeometries
+            features = features.explode()
+
+            # transform to tile coordinate space
+            transform_to_tile_coordinate_space = functools.partial(
+                self._transform_to_tile_coordinate_space,
+                origin_x=left,
+                origin_y=bottom,
+                ratio_x=(TILE_WIDTH / width),
+                ratio_y=(TILE_HEIGHT / height),
+            )
+            features["geometry"] = shapely.transform(
+                features["geometry"].force_2d(),
+                transform_to_tile_coordinate_space,
+                interleaved=False,
+            )
+
+            features = features.reset_index(drop=True)
+            features["id"] = features.index
+
+            features = features.apply(self._convert_feature, axis=1).to_list()
+
+            tile = vt2pbf.service.tile.Tile()
+            tile.add_layer(self.layer_name, features)
+            tile = tile.serialize_to_bytestring()
+
         else:
-            tile = vt2pbf(tile)
+            tile = self.EMPTY_TILE
         return tile
 
     @property
@@ -97,30 +132,52 @@ class TileLayer:
         )
         return f"{tile_layer_url}" "/{z}/{x}/{y}"
 
-    def reload_data(self, data):
-        """
-        Reload the underlying data.
+    @staticmethod
+    def _transform_to_tile_coordinate_space(
+        x,
+        y,
+        origin_x=None,
+        origin_y=None,
+        ratio_x=None,
+        ratio_y=None,
+    ):
+        x = (x - origin_x) * ratio_x
+        y = TILE_HEIGHT - ((y - origin_y) * ratio_y)
+        return x, y
 
-        Arguments
-        ---------
-        data : geopandas.GeoDataFrame | pathlib.Path
-            reload the data from this GeoDataFrame/file readable by
-            ``geopandas.read_file()``
-        """
-        if isinstance(data, pathlib.Path):
-            data = geopandas.read_file(data)
-        else:
-            data = geopandas.GeoDataFrame(data)
+    @staticmethod
+    def _convert_feature(row):
+        row = row.to_dict()
+        id_ = row.pop("id")
+        geometry = row.pop("geometry")
+        coordinates = list(geometry.coords)
 
-        data = data.to_crs("EPSG:4326")
+        geometry_type = 0  # UNKNOWN
+        coordinates = []
+        if geometry.geom_type == "Point":
+            geometry_type = 1
+            coordinates = [
+                [round(geometry.x), round(geometry.y)],
+            ]
+        elif geometry.geom_type == "LineString":
+            geometry_type = 2
+            coordinates = [
+                [[round(x), round(y)] for x, y in geometry.coords],
+            ]
+        elif geometry.geom_type == "Polygon":
+            coordinates = [
+                [
+                    [[round(x), round(y)] for x, y in part]
+                    for part in [geometry.exterior] + list(geometry.interiors)
+                ],
+            ]
+            geometry_type = 3
 
-        bounds = [float(coordinate) for coordinate in data.total_bounds]
-        fields = [str(column_name) for column_name in data.columns]
-        data = self._geodataframe_to_geojson(data)
+        feature = {
+            "id": id_,
+            "geometry": coordinates,
+            "tags": row,
+            "type": geometry_type,
+        }
 
-        self.tile_index = geojson2vt.GeoJsonVt(
-            data,
-            options={"maxZoom": 24},
-        )
-        self.bounds = bounds
-        self.fields = fields
+        return feature
