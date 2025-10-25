@@ -5,6 +5,7 @@
 
 
 import datetime
+import functools
 
 try:
     import xdg_base_dirs
@@ -15,15 +16,14 @@ except ImportError:  # Python<3.10
 __all__ = ["Cache"]
 
 
-PACKAGE = __name__.split(".")[0]
+PACKAGE = __name__.split(".", maxsplit=1)[0]
+ONE_WEEK = datetime.timedelta(weeks=1)
 
 
 class Cache:
     """A mechanism for caching files."""
 
-    CACHE_DIR = xdg_base_dirs.xdg_cache_home() / f"{PACKAGE}"
-
-    def __init__(self, name, max_cache_age=datetime.timedelta(weeks=1)):
+    def __init__(self, name, max_cache_age=ONE_WEEK):
         """
         Initialise a cache.
 
@@ -44,7 +44,6 @@ class Cache:
 
     def __exit__(self, exc_type, exc_value, traceback):
         """Leave a cache context."""
-        pass
 
     def __getitem__(self, key):
         """Fetch item from cache (or None)."""
@@ -63,18 +62,21 @@ class Cache:
         cache_path.write_bytes(value)
 
     def _cache_path_for(self, key):
-        cache_path = self.CACHE_DIR / key
-        try:
-            assert cache_path.is_relative_to(self.CACHE_DIR)
-        except AssertionError:
-            raise RuntimeError("Cache keys cannot be absolute or parent paths")
+        cache_path = self.cache_directory / key
+        assert cache_path.is_relative_to(
+            self.cache_directory
+        ), "Cache keys cannot be absolute or parent paths"
         return cache_path
+
+    @functools.cached_property
+    def cache_directory(self):
+        """Where are this cache’s items stored."""
+        return xdg_base_dirs.xdg_cache_home() / f"{PACKAGE}" / f"{self.name}"
 
     def expire(self, key):
         """Expire a cached item."""
         cache_path = self._cache_path_for(key)
-        if (
-            datetime.datetime.fromtimestamp(cache_path.stat().st_mtime)
-            > (datetime.datetime.now() - self.max_cache_age)
+        if datetime.datetime.fromtimestamp(cache_path.stat().st_mtime) > (
+            datetime.datetime.now() - self.max_cache_age
         ):
             cache_path.unlink()

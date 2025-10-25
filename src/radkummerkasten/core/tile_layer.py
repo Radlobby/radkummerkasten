@@ -14,7 +14,6 @@ import vt2pbf
 
 from ..utilities import Cache
 
-
 __all__ = [
     "TileLayer",
 ]
