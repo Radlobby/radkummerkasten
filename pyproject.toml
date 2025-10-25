@@ -20,7 +20,7 @@ dependencies = [
     "mercantile",
     "requests",
     "shapely",
-    "vt2pbf",
+    "vt2pbf @ git+https://github.com/christophfink/vt2pbf.git",
     "xdg-base-dirs; python_version > '3.9'",
     "xdg; python_version < '3.10'",
 ]
