@@ -12,6 +12,9 @@ import mercantile
 import shapely
 import vt2pbf
 
+from ..utilities import Cache
+
+
 __all__ = [
     "TileLayer",
 ]
@@ -41,6 +44,7 @@ class TileLayer:
         self.data = data
         self.layer_name = layer_name
 
+        self.cache = Cache(layer_name)
         self.EMPTY_TILE = vt2pbf.Tile().serialize_to_bytestring()
 
         try:
@@ -60,47 +64,51 @@ class TileLayer:
         x, y, z : int
             coordinates and zoom level of the tile requested
         """
-        # TODO: implement caching
+        tile = self.cache[f"{z}/{x}/{y}"]
 
-        bounds = mercantile.bounds(mercantile.Tile(x, y, z))
-        left, bottom, *_ = bounds
-        width = bounds[2] - bounds[0]
-        height = bounds[3] - bounds[1]
+        if tile is None:
+            bounds = mercantile.bounds(mercantile.Tile(x, y, z))
+            left, bottom, *_ = bounds
+            width = bounds[2] - bounds[0]
+            height = bounds[3] - bounds[1]
 
-        # Add a buffer that would be 64 units (of 4096 width) in the output pbf
-        mask = shapely.box(*bounds).buffer(width / (TILE_HEIGHT / TILE_BUFFER))
+            # Add a buffer that would be 64 units (of 4096 width) in the output pbf
+            mask = shapely.box(*bounds).buffer(width / (TILE_HEIGHT / TILE_BUFFER))
 
-        features = geopandas.read_file(self.data, mask=mask).clip(mask)
+            features = geopandas.read_file(self.data, mask=mask).clip(mask)
 
-        if len(features) > 0:
-            # make sure we don’t have multigeometries
-            features = features.explode()
+            if len(features) > 0:
+                # make sure we don’t have multigeometries
+                features = features.explode()
 
-            # transform to tile coordinate space
-            transform_to_tile_coordinate_space = functools.partial(
-                self._transform_to_tile_coordinate_space,
-                origin_x=left,
-                origin_y=bottom,
-                ratio_x=(TILE_WIDTH / width),
-                ratio_y=(TILE_HEIGHT / height),
-            )
-            features["geometry"] = shapely.transform(
-                features["geometry"].force_2d(),
-                transform_to_tile_coordinate_space,
-                interleaved=False,
-            )
+                # transform to tile coordinate space
+                transform_to_tile_coordinate_space = functools.partial(
+                    self._transform_to_tile_coordinate_space,
+                    origin_x=left,
+                    origin_y=bottom,
+                    ratio_x=(TILE_WIDTH / width),
+                    ratio_y=(TILE_HEIGHT / height),
+                )
+                features["geometry"] = shapely.transform(
+                    features["geometry"].force_2d(),
+                    transform_to_tile_coordinate_space,
+                    interleaved=False,
+                )
 
-            features = features.reset_index(drop=True)
-            features["id"] = features.index
+                features = features.reset_index(drop=True)
+                features["id"] = features.index
 
-            features = features.apply(self._convert_feature, axis=1).to_list()
+                features = features.apply(self._convert_feature, axis=1).to_list()
 
-            tile = vt2pbf.service.tile.Tile()
-            tile.add_layer(self.layer_name, features)
-            tile = tile.serialize_to_bytestring()
+                tile = vt2pbf.service.tile.Tile()
+                tile.add_layer(self.layer_name, features)
+                tile = tile.serialize_to_bytestring()
 
-        else:
-            tile = self.EMPTY_TILE
+            else:
+                tile = self.EMPTY_TILE
+
+            self.cache[f"{z}/{x}/{y}"] = tile
+
         return tile
 
     @property

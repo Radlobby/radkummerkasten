@@ -5,7 +5,9 @@
 
 
 from . import decorators
+from .cache import Cache
 
 __all__ = [
     "decorators",
+    "Cache",
 ]
