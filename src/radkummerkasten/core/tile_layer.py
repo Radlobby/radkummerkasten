@@ -141,13 +141,13 @@ class TileLayer:
 
     @staticmethod
     def _transform_to_tile_coordinate_space(
-        x,
-        y,
+        xyz,
         origin_x=None,
         origin_y=None,
         ratio_x=None,
         ratio_y=None,
     ):
+        x, y, *_ = xyz
         x = (x - origin_x) * ratio_x
         y = TILE_HEIGHT - ((y - origin_y) * ratio_y)
         return x, y
