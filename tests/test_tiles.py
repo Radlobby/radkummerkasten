@@ -99,5 +99,6 @@ class Test_Tiles:
 
     def test_tile_layer_with_wrong_path(self):
         from radkummerkasten.core import TileLayer
+
         with pytest.raises(RuntimeError):
             _ = TileLayer("foobar.gpkg", "foobar")
