@@ -157,7 +157,6 @@ class TileLayer:
         row = row.to_dict()
         id_ = row.pop("id")
         geometry = row.pop("geometry")
-        coordinates = list(geometry.coords)
 
         geometry_type = 0  # UNKNOWN
         coordinates = []
@@ -174,7 +173,7 @@ class TileLayer:
         elif geometry.geom_type == "Polygon":
             coordinates = [
                 [
-                    [[round(x), round(y)] for x, y in part]
+                    [[round(x), round(y)] for x, y in part.coords]
                     for part in [geometry.exterior] + list(geometry.interiors)
                 ],
             ]

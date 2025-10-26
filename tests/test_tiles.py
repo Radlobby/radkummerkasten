@@ -97,9 +97,7 @@ class Test_Tiles:
 
         _ = TileLayer(tile_layer_file, tile_layer_file.stem)
 
-    def test_init_with_geodataframe(self, tile_layer_file):
-        import geopandas
-
+    def test_tile_layer_with_wrong_path(self):
         from radkummerkasten.core import TileLayer
-
-        _ = TileLayer(geopandas.read_file(tile_layer_file), tile_layer_file.stem)
+        with pytest.raises(RuntimeError):
+            _ = TileLayer("foobar.gpkg", "foobar")

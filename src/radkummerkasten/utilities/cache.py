@@ -38,13 +38,6 @@ class Cache:
         self.name = name
         self.max_cache_age = max_cache_age
 
-    def __enter__(self):
-        """Enter a cache context."""
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        """Leave a cache context."""
-
     def __getitem__(self, key):
         """Fetch item from cache (or None)."""
         cache_path = self._cache_path_for(key)
@@ -62,7 +55,7 @@ class Cache:
         cache_path.write_bytes(value)
 
     def _cache_path_for(self, key):
-        cache_path = self.cache_directory / key
+        cache_path = self.cache_directory / f"{key}"
         assert cache_path.is_relative_to(
             self.cache_directory
         ), "Cache keys cannot be absolute or parent paths"

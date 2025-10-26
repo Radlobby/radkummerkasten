@@ -5,6 +5,7 @@
 
 import os
 import pathlib
+import shutil
 import tempfile
 
 import pytest
@@ -39,6 +40,14 @@ def application_with_empty_config():
 
 
 @pytest.fixture(scope="session")
+def cache():
+    """Provide and tear down a radkummerkasten.utilities.cache."""
+    cache = radkummerkasten.utilities.Cache("test")
+    yield cache
+    shutil.rmtree(cache.cache_directory)
+
+
+@pytest.fixture(scope="session")
 def client(application):
     """Provide a client for the tests."""
     return application.test_client()
@@ -59,8 +68,7 @@ def expected_tile_json(request, data_directory):
 @pytest.fixture(scope="function")
 def expected_tile_pbf(request, data_directory):
     """Read the expected content of a vector tile from disk."""
-    with (data_directory / f"{request.param}.pbf").open("rb") as f:
-        tile_pbf = f.read()
+    tile_pbf = (data_directory / f"{request.param}.pbf").read_bytes()
     if tile_pbf.endswith(b"\r\n"):  # weird line feeds when reading on windows
         tile_pbf = tile_pbf[:-2] + b"\n"
     return tile_pbf
