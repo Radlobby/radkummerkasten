@@ -74,7 +74,7 @@ class TileLayer:
             # Add a buffer that would be 64 units (of 4096 width) in the output pbf
             mask = shapely.box(*bounds).buffer(width / (TILE_HEIGHT / TILE_BUFFER))
 
-            features = geopandas.read_file(self.data, mask=mask).clip(mask)
+            features = geopandas.read_file(self.data, mask=mask).clip(mask, sort=True)
 
             if len(features) > 0:
                 # make sure we don’t have multigeometries
