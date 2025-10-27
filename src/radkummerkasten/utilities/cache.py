@@ -6,6 +6,7 @@
 
 import datetime
 import functools
+import os.path
 
 try:
     import xdg_base_dirs
@@ -56,10 +57,17 @@ class Cache:
 
     def _cache_path_for(self, key):
         cache_path = self.cache_directory / f"{key}"
-        assert cache_path.is_relative_to(
-            self.cache_directory
+        assert self._is_subpath(
+            self.cache_directory, cache_path
         ), "Cache keys cannot be absolute or parent paths"
         return cache_path
+
+    @staticmethod
+    def _is_subpath(path, subpath):
+        """Determine whether `subpath` is inside `path`."""
+        path = path.resolve()
+        subpath = subpath.resolve()
+        return os.path.commonprefix([path, subpath]) == f"{path}"
 
     @functools.cached_property
     def cache_directory(self):
