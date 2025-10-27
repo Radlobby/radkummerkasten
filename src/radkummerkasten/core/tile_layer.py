@@ -12,7 +12,7 @@ import mercantile
 import shapely
 import vt2pbf
 
-from ..utilities import Cache
+from ..utilities import BytesCache
 
 __all__ = [
     "TileLayer",
@@ -44,7 +44,7 @@ class TileLayer:
         self.bounds = None
         self.data = data
         self.layer_name = layer_name
-        self.cache = Cache(layer_name)
+        self.cache = BytesCache(layer_name)
 
         try:
             data = geopandas.read_file(self.data)

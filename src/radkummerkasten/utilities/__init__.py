@@ -5,9 +5,9 @@
 
 
 from . import decorators
-from .cache import Cache
+from .bytes_cache import BytesCache
 
 __all__ = [
     "decorators",
-    "Cache",
+    "BytesCache",
 ]

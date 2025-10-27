@@ -42,7 +42,7 @@ def application_with_empty_config():
 @pytest.fixture(scope="session")
 def cache():
     """Provide and tear down a radkummerkasten.utilities.cache."""
-    cache = radkummerkasten.utilities.Cache("test")
+    cache = radkummerkasten.utilities.BytesCache("test")
     yield cache
     shutil.rmtree(cache.cache_directory)
 

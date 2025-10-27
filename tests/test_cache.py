@@ -4,7 +4,7 @@
 import pytest
 
 
-class TestCache:
+class TestBytesCache:
     @pytest.mark.parametrize(
         ("key", "value"),
         [

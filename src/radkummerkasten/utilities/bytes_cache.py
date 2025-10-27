@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-"""A mechanism for caching files."""
+"""A mechanism for caching byte string."""
 
 
 import datetime
@@ -14,15 +14,15 @@ except ImportError:  # Python<3.10
     import xdg as xdg_base_dirs
 
 
-__all__ = ["Cache"]
+__all__ = ["BytesCache"]
 
 
 PACKAGE = __name__.split(".", maxsplit=1)[0]
 ONE_WEEK = datetime.timedelta(weeks=1)
 
 
-class Cache:
-    """A mechanism for caching files."""
+class BytesCache:
+    """A mechanism for caching byte string."""
 
     def __init__(self, name, max_cache_age=ONE_WEEK):
         """
