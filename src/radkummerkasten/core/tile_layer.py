@@ -27,6 +27,8 @@ TILE_BUFFER = 64
 class TileLayer:
     """Compute vector tiles of a dataset for a zoom level and tile index."""
 
+    EMPTY_TILE = vt2pbf.Tile().serialize_to_bytestring()
+
     def __init__(self, data, layer_name):
         """
         Compute vector tiles of one of more datasets.
@@ -42,9 +44,7 @@ class TileLayer:
         self.bounds = None
         self.data = data
         self.layer_name = layer_name
-
         self.cache = Cache(layer_name)
-        self.EMPTY_TILE = vt2pbf.Tile().serialize_to_bytestring()
 
         try:
             data = geopandas.read_file(self.data)
@@ -83,15 +83,12 @@ class TileLayer:
                 # transform to tile coordinate space
                 transform_to_tile_coordinate_space = functools.partial(
                     self._transform_to_tile_coordinate_space,
-                    origin_x=left,
-                    origin_y=bottom,
-                    ratio_x=(TILE_WIDTH / width),
-                    ratio_y=(TILE_HEIGHT / height),
+                    origin=[left, bottom],
+                    ratio=[(TILE_WIDTH / width), (TILE_HEIGHT / height)],
                 )
                 features["geometry"] = shapely.transform(
                     features["geometry"].force_2d(),
                     transform_to_tile_coordinate_space,
-                    interleaved=False,
                 )
 
                 features = features.reset_index(drop=True)
@@ -141,16 +138,15 @@ class TileLayer:
 
     @staticmethod
     def _transform_to_tile_coordinate_space(
-        xyz,
-        origin_x=None,
-        origin_y=None,
-        ratio_x=None,
-        ratio_y=None,
+        coordinates,
+        origin,
+        ratio,
     ):
-        x, y, *_ = xyz
-        x = (x - origin_x) * ratio_x
-        y = TILE_HEIGHT - ((y - origin_y) * ratio_y)
-        return x, y
+        coordinates = coordinates.swapaxes(0, 1)
+        coordinates[0] = (coordinates[0] - origin[0]) * ratio[0]
+        coordinates[1] = TILE_HEIGHT - ((coordinates[1] - origin[1]) * ratio[1])
+        coordinates = coordinates.swapaxes(0, 1)
+        return coordinates
 
     @staticmethod
     def _convert_feature(row):

@@ -63,6 +63,9 @@ class Test_Tiles:
         self, client, layer, z, x, y, expected_tile_pbf, expected_http_status
     ):
         response = client.get(f"/tiles/{layer}/{z}/{x}/{y}")
+        import pathlib
+
+        pathlib.Path("/tmp/{layer}-{z}-{x}-{y}.pbf").write_bytes(response.get_data())
         assert response.status_code == expected_http_status
         assert response.get_data() == expected_tile_pbf
 
