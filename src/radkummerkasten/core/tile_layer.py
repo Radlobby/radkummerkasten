@@ -63,13 +63,13 @@ class TileLayer:
         x, y, z : int
             coordinates and zoom level of the tile requested
         """
-        tile = self.cache[f"{z}/{x}/{y}"]
-
-        if tile is None:
+        try:
+            tile = self.cache[f"{z}/{x}/{y}"]
+        except KeyError:
             bounds = mercantile.bounds(mercantile.Tile(x, y, z))
-            left, bottom, *_ = bounds
-            width = bounds[2] - bounds[0]
-            height = bounds[3] - bounds[1]
+            left, bottom, right, top = bounds
+            width = right - left
+            height = top - bottom
 
             # Add a buffer that would be 64 units (of 4096 width) in the output pbf
             mask = shapely.box(*bounds).buffer(width / (TILE_HEIGHT / TILE_BUFFER))
@@ -83,8 +83,8 @@ class TileLayer:
                 # transform to tile coordinate space
                 transform_to_tile_coordinate_space = functools.partial(
                     self._transform_to_tile_coordinate_space,
-                    origin=[left, bottom],
-                    ratio=[(TILE_WIDTH / width), (TILE_HEIGHT / height)],
+                    origin=(left, bottom),
+                    ratio=((TILE_WIDTH / width), (TILE_HEIGHT / height)),
                 )
                 features["geometry"] = shapely.transform(
                     features["geometry"].force_2d(),

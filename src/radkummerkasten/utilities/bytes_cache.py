@@ -45,8 +45,10 @@ class BytesCache:
         try:
             value = cache_path.read_bytes()
             self.expire(key)
-        except FileNotFoundError:
-            value = None
+        except FileNotFoundError as exception:
+            raise KeyError(
+                f"Item {key} not found in cache {self.name}."
+            ) from exception
         return value
 
     def __setitem__(self, key, value):
@@ -71,13 +73,27 @@ class BytesCache:
 
     @functools.cached_property
     def cache_directory(self):
-        """Where are this cache’s items stored."""
+        """Path to cache directory."""
         return xdg_base_dirs.xdg_cache_home() / f"{PACKAGE}" / f"{self.name}"
 
-    def expire(self, key):
-        """Expire a cached item."""
+    def expire(self, key, now=False):
+        """
+        Expire a cached item.
+
+        Arguments
+        ---------
+        key : str
+            Expire the cached item identified by `key`
+        now : bool
+            Delete the cached item independent of whether or not it has reached
+            max cache age.
+        """
         cache_path = self._cache_path_for(key)
-        if datetime.datetime.fromtimestamp(cache_path.stat().st_mtime) > (
-            datetime.datetime.now() - self.max_cache_age
+        if (
+            now
+            or (
+                datetime.datetime.fromtimestamp(cache_path.stat().st_mtime)
+                < (datetime.datetime.now() - self.max_cache_age)
+            )
         ):
             cache_path.unlink()

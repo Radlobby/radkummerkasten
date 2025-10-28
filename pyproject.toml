@@ -19,7 +19,7 @@ dependencies = [
     "mercantile",
     "requests",
     "shapely",
-    "vt2pbf @ git+https://github.com/christophfink/vt2pbf.git",
+    "vt2pbf",
     "xdg-base-dirs; python_version > '3.9'",
     "xdg; python_version < '3.10'",
 ]
@@ -112,5 +112,23 @@ ecmascript_files = [
     "src/radkummerkasten/frontend/static/script/radkummerkasten.js",
 ]
 
+[tool.setuptools]
+include-package-data = false
+
 [tool.setuptools.dynamic]
 version = {attr = "radkummerkasten.__version__"}
+
+[tool.setuptools.package-data]
+"*" = [
+    "*.html",
+    "*.jpg",
+    "*.js.map",
+    "*.json",
+    "*.min.css",
+    "*.min.js",
+    "*.png",
+    "*.svg",
+    "*.webmanifest",
+    "*.webp",
+    "*.woff2",
+]
