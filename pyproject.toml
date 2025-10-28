@@ -15,14 +15,13 @@ authors = [
 dependencies = [
     "flask",
     "geoalchemy2",
-    "geojson2vt",
+    "flask-cors",
     "geopandas",
     "mercantile",
     "requests",
     "shapely",
     "sqlalchemy",
     "vt2pbf",
-    "werkzeug",
     "xdg-base-dirs; python_version > '3.9'",
     "xdg; python_version < '3.10'",
 ]
@@ -40,11 +39,31 @@ license = "GPL-3.0-or-later"
 dynamic = ["version"]
 
 [project.optional-dependencies]
-dev = ["black", "flake8", "flake8-bugbear", "flake8-pyproject", "isort",
-       "pydocstyle", "pylint"]
-docs = ["sphinx", "sphinx-book-theme", "sphinx-design",
-        "sphinxcontrib-bibtex", "sphinxcontrib-images"]
-tests = ["pytest", "pytest-cov", "pytest-lazy-fixtures", "requests", "selenium", "werkzeug"]
+dev = [
+    "black",
+    "flake8",
+    "flake8-bugbear",
+    "flake8-pyproject",
+    "isort",
+    "pydocstyle",
+    "pylint",
+    "werkzeug"
+]
+docs = [
+    "sphinx",
+    "sphinx-book-theme",
+    "sphinx-design",
+    "sphinxcontrib-bibtex",
+    "sphinxcontrib-images"
+]
+tests = [
+    "pytest",
+    "pytest-cov",
+    "pytest-lazy-fixtures",
+    "requests",
+    "selenium",
+    "werkzeug"
+]
 
 
 [project.urls]
@@ -90,7 +109,28 @@ testpaths = ["tests"]
 
 [tools.radkummerkasten-build-backend]
 sass_files = ["src/radkummerkasten/frontend/static/style/radkummerkasten.sass"]
-ecmascript_files = ["src/radkummerkasten/frontend/static/script/radkummerkasten.js"]
+ecmascript_files = [
+    "src/radkummerkasten/frontend/static/script/radkummerkasten-map.js",
+    "src/radkummerkasten/frontend/static/script/radkummerkasten.js",
+]
+
+[tool.setuptools]
+include-package-data = false
 
 [tool.setuptools.dynamic]
 version = {attr = "radkummerkasten.__version__"}
+
+[tool.setuptools.package-data]
+"*" = [
+    "*.html",
+    "*.jpg",
+    "*.js.map",
+    "*.json",
+    "*.min.css",
+    "*.min.js",
+    "*.png",
+    "*.svg",
+    "*.webmanifest",
+    "*.webp",
+    "*.woff2",
+]
