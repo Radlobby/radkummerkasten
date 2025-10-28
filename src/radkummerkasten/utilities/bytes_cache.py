@@ -46,9 +46,7 @@ class BytesCache:
             value = cache_path.read_bytes()
             self.expire(key)
         except FileNotFoundError as exception:
-            raise KeyError(
-                f"Item {key} not found in cache {self.name}."
-            ) from exception
+            raise KeyError(f"Item {key} not found in cache {self.name}.") from exception
         return value
 
     def __setitem__(self, key, value):
@@ -89,11 +87,8 @@ class BytesCache:
             max cache age.
         """
         cache_path = self._cache_path_for(key)
-        if (
-            now
-            or (
-                datetime.datetime.fromtimestamp(cache_path.stat().st_mtime)
-                < (datetime.datetime.now() - self.max_cache_age)
-            )
+        if now or (
+            datetime.datetime.fromtimestamp(cache_path.stat().st_mtime)
+            < (datetime.datetime.now() - self.max_cache_age)
         ):
             cache_path.unlink()

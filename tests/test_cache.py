@@ -2,8 +2,8 @@
 
 
 import datetime
-import pathlib
 import os
+import pathlib
 
 import pytest
 
@@ -51,9 +51,7 @@ class TestBytesCache:
     def test_expire_by_age(self, cache, key, value):
         cache[key] = value
         EXPIRED = (
-            datetime.datetime.now()
-            - cache.max_cache_age
-            - datetime.timedelta(days=1)
+            datetime.datetime.now() - cache.max_cache_age - datetime.timedelta(days=1)
         ).timestamp()
         os.utime(cache._cache_path_for(key), (EXPIRED, EXPIRED))
 
