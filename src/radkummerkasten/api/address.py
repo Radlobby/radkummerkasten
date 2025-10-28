@@ -20,7 +20,7 @@ class Address(flask.Blueprint):
     _NAME = "address"
     _IMPORT_NAME = __name__
     _kwargs = {
-        "url_prefix": "/address",
+        "url_prefix": "/api/address",
     }
 
     def __init__(self, configuration, *args, **kwargs):
@@ -28,6 +28,8 @@ class Address(flask.Blueprint):
         kwargs = kwargs or {}
         kwargs.update(self._kwargs)
         super().__init__(self._NAME, self._IMPORT_NAME, *args, **kwargs)
+
+        self.configuration = configuration
 
         try:
             self._address_lookup = AddressLookup(configuration["ADDRESS_LOOKUP_LAYER"])

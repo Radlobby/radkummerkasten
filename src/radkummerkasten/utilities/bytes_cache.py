@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+
+
+"""A mechanism for caching byte string."""
+
+
+import datetime
+import functools
+import os.path
+
+try:
+    import xdg_base_dirs
+except ImportError:  # Python<3.10
+    import xdg as xdg_base_dirs
+
+
+__all__ = ["BytesCache"]
+
+
+PACKAGE = __name__.split(".", maxsplit=1)[0]
+ONE_WEEK = datetime.timedelta(weeks=1)
+
+
+class BytesCache:
+    """A mechanism for caching byte string."""
+
+    def __init__(self, name, max_cache_age=ONE_WEEK):
+        """
+        Initialise a cache.
+
+        Arguments
+        ---------
+        name : str
+            A freetext realm for this cache
+        max_cache_age : datetime.timedelta
+            Delete files from the cache that are older than max_cache_age.
+            Default: one week
+        """
+        self.name = name
+        self.max_cache_age = max_cache_age
+
+    def __getitem__(self, key):
+        """Fetch item from cache (or None)."""
+        cache_path = self._cache_path_for(key)
+        try:
+            value = cache_path.read_bytes()
+            self.expire(key)
+        except FileNotFoundError as exception:
+            raise KeyError(f"Item {key} not found in cache {self.name}.") from exception
+        return value
+
+    def __setitem__(self, key, value):
+        """Store value in cache."""
+        cache_path = self._cache_path_for(key)
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        cache_path.write_bytes(value)
+
+    def _cache_path_for(self, key):
+        cache_path = self.cache_directory / f"{key}"
+        assert self._is_subpath(
+            self.cache_directory, cache_path
+        ), "Cache keys cannot be absolute or parent paths"
+        return cache_path
+
+    @staticmethod
+    def _is_subpath(path, subpath):
+        """Determine whether `subpath` is inside `path`."""
+        path = path.resolve()
+        subpath = subpath.resolve()
+        return os.path.commonprefix([path, subpath]) == f"{path}"
+
+    @functools.cached_property
+    def cache_directory(self):
+        """Path to cache directory."""
+        return xdg_base_dirs.xdg_cache_home() / f"{PACKAGE}" / f"{self.name}"
+
+    def expire(self, key, now=False):
+        """
+        Expire a cached item.
+
+        Arguments
+        ---------
+        key : str
+            Expire the cached item identified by `key`
+        now : bool
+            Delete the cached item independent of whether or not it has reached
+            max cache age.
+        """
+        cache_path = self._cache_path_for(key)
+        if now or (
+            datetime.datetime.fromtimestamp(cache_path.stat().st_mtime)
+            < (datetime.datetime.now() - self.max_cache_age)
+        ):
+            cache_path.unlink()

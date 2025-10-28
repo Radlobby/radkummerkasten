@@ -3,12 +3,12 @@
     "start_url": ".",
     "icons": [
         {
-            "src": "static/favicon_192x192px.png",
+            "src": "static/images/favicon_192x192px.png",
             "type": "image/png",
             "sizes": "192x192"
         },
         {
-            "src": "static/favicon_512x512px.png",
+            "src": "static/images/favicon_512x512px.png",
             "type": "image/png",
             "sizes": "512x512"
         }

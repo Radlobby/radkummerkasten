@@ -6,8 +6,8 @@
 
 import flask
 
-from ..core import tiles
-from ..utilities.decorators import local_referer_only
+from ..core import TileLayer
+from ..utilities.decorators import csp_allow_self, local_referer_only
 
 __all__ = [
     "Tiles",
@@ -20,7 +20,7 @@ class Tiles(flask.Blueprint):
     _NAME = "tiles"
     _IMPORT_NAME = __name__
     _kwargs = {
-        "url_prefix": "/",
+        "url_prefix": "/tiles",
     }
 
     def __init__(self, configuration, *args, **kwargs):
@@ -29,37 +29,57 @@ class Tiles(flask.Blueprint):
         kwargs.update(self._kwargs)
         super().__init__(self._NAME, self._IMPORT_NAME, *args, **kwargs)
 
+        self.configuration = configuration
+
         try:
             tile_layers = configuration["TILE_LAYERS"]
         except KeyError:
             tile_layers = {}
 
-        self._tiles = {}
+        self.tile_layers = {}
         for tile_layer_name, tile_layer_source in tile_layers.items():
-            self._tiles[tile_layer_name] = tiles.Tiles(tile_layer_source)
+            self.tile_layers[tile_layer_name] = TileLayer(
+                tile_layer_source, tile_layer_name
+            )
             self.add_url_rule(
                 "/<string:tile_layer>/<int:z>/<int:x>/<int:y>",
                 view_func=self.tile,
                 methods=("GET",),
             )
+            self.add_url_rule(
+                "/<string:tile_layer>",
+                view_func=self.tilejson,
+                methods=("GET",),
+            )
 
     # TODO: implement etag matching
+    @csp_allow_self
     @local_referer_only
     def tile(self, z, x, y, tile_layer):
         """Serve a vector tile."""
         try:
-            tile = self._tiles[tile_layer].tile(z, x, y)
-            assert tile is not None
-        except (
-            AssertionError,  # tile not found
-            KeyError,  # layer not found
-        ):
+            tile = self.tile_layers[tile_layer].tile(z, x, y)
+        except KeyError:
             response = (
-                flask.jsonify(
-                    error=f"Tile {z}/{x}/{y} of layer {tile_layer} not found."
-                ),
+                flask.jsonify(error=f"Tile layer {tile_layer} not found."),
                 404,
             )
         else:
             response = flask.Response(tile, mimetype="application/x-protobuf")
+        return response
+
+    # TODO: implement etag matching
+    @csp_allow_self
+    @local_referer_only
+    def tilejson(self, tile_layer):
+        """Serve the metadata about a tile layer."""
+        try:
+            tilejson = self.tile_layers[tile_layer].tilejson
+        except KeyError:
+            response = (
+                flask.jsonify(error=f"Tile layer {tile_layer} not found."),
+                404,
+            )
+        else:
+            response = flask.jsonify(tilejson)
         return response

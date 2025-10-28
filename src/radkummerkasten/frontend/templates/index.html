@@ -19,7 +19,7 @@
         <link ref="canonical" href="https://radkummerkasten.at/">
         <link rel="manifest" href="static/radkummerkasten.at.webmanifest">
 
-        <link rel="icon" type="image/svg+xml" href="static/images/favicon.svg" sizes="any">
+        <link rel="icon" type="image/svg+xml" href="{{url_for('radkummerkasten.static', filename='images/favicon.svg')}}" sizes="any">
         <link rel="apple-touch-icon" href="static/images/apple-touch-icon.png">
 
         <script src="static/script/maplibre-gl.min.js"></script>
@@ -35,5 +35,6 @@
     <body>
         <h1>Radkummerkasten</h1>
         <div id="map"></div>
+        <!--// {{url_for("radkummerkasten.static", filename="radkummerkasten.at.webmanifest", _external=True)}}  //-->
     </body>
 </html>

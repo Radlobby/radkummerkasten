@@ -46,7 +46,7 @@ class Test_Tiles:
                 25485,
                 3673,
                 "radlkarte-15-25485-3673",
-                404,
+                200,
             ),
             (
                 "non-existing",
@@ -66,7 +66,39 @@ class Test_Tiles:
         assert response.status_code == expected_http_status
         assert response.get_data() == expected_tile_pbf
 
+    @pytest.mark.parametrize(
+        ("layer", "expected_tile_json", "expected_http_status"),
+        [
+            (
+                "radlkarte",
+                "radlkarte",
+                200,
+            ),
+            (
+                "non-existing",
+                "non-existing",
+                404,
+            ),
+        ],
+        indirect=["expected_tile_json"],
+    )
+    def test_tilejson(self, client, layer, expected_tile_json, expected_http_status):
+        response = client.get(f"/tiles/{layer}")
+        assert response.status_code == expected_http_status
+        assert response.text == expected_tile_json
+
     def test_without_tile_layers(self, application_with_empty_config):
         client = application_with_empty_config.test_client()
         response = client.get("/tiles/layer/12/345/678")
         assert response.status_code == 404
+
+    def test_tile_layer_with_path(self, tile_layer_file):
+        from radkummerkasten.core import TileLayer
+
+        _ = TileLayer(tile_layer_file, tile_layer_file.stem)
+
+    def test_tile_layer_with_wrong_path(self):
+        from radkummerkasten.core import TileLayer
+
+        with pytest.raises(RuntimeError):
+            _ = TileLayer("foobar.gpkg", "foobar")
