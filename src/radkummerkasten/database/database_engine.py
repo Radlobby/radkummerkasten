@@ -6,7 +6,6 @@
 
 import pathlib
 
-import geoalchemy2
 import sqlalchemy
 
 __all__ = ["DatabaseEngine"]
@@ -20,15 +19,14 @@ class DatabaseEngine:
 
     def __init__(self, instance_path):
         """Start a database engine."""
-        self.path = pathlib.Path(instance_path) / "database" / f"{PACKAGE}.gpkg"
+        self.path = pathlib.Path(instance_path) / "database" / f"{PACKAGE}.sqlite"
         self.path.parent.mkdir(parents=True, exist_ok=True)
 
-        self._engine = sqlalchemy.create_engine(f"gpkg://{self.path}")
-        sqlalchemy.event.listen(
-            self._engine,
-            "connect",
-            geoalchemy2.load_spatialite_gpkg,
+        self._engine = sqlalchemy.create_engine(
+            f"sqlite:///{self.path}",
+            connect_args={"autocommit": False},
         )
+        self._engine.connect()  # create database
 
     def __enter__(self):
         """Use this engine."""
@@ -36,3 +34,8 @@ class DatabaseEngine:
 
     def __exit__(self, exc_type, exc_value, traceback):
         """Exit database engine context."""
+
+    @property
+    def session(self):
+        """Return a session instance."""
+        return sqlalchemy.orm.sessionmaker(self._engine, autoflush=False)()

@@ -21,7 +21,7 @@ def snake_case(camel_case):
     return CAMEL_CASE_TO_SNAKE_CASE_RE.sub(r"_\1", camel_case).lower()
 
 
-class Base(sqlalchemy.orm.DeclarativeBase, sqlalchemy.orm.MappedAsDataClass):
+class Base(sqlalchemy.orm.DeclarativeBase, sqlalchemy.orm.MappedAsDataclass):
     """Template for sqlalchemy declarative_base() to add shared functionality."""
 
     @sqlalchemy.orm.declared_attr

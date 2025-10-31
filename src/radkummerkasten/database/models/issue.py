@@ -5,10 +5,9 @@
 
 
 import enum
+import uuid
 
-from geoalchemy2 import Geometry, WKBElement
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.types import Uuid
 
 from .base import Base
 
@@ -60,8 +59,9 @@ class Issue(Base):
     Note that the first comment to this issue is shown as the issue text.
     """
 
-    id: Mapped[Uuid] = mapped_column(primary_key=True)
     issue_type: Mapped[IssueType] = mapped_column(nullable=False)
-    point: Mapped[WKBElement] = mapped_column(
-        Geometry(geometry_type="POINT", srid=4326)
-    )
+    lon: Mapped[float] = mapped_column(nullable=False)
+    lat: Mapped[float] = mapped_column(nullable=False)
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    # address!
