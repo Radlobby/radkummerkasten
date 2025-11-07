@@ -1,55 +1,25 @@
 #!/usr/bin/env python3
 
 
-"""The database model issues on the radkummerkasten map."""
+"""The database model for issues on the radkummerkasten map."""
 
 
-import enum
+import datetime
 import uuid
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import (
+    ForeignKey,
+)
+from sqlalchemy.orm import (
+    Mapped,
+    mapped_column,
+    relationship,
+)
 
 from .base import Base
+from .issue_type import IssueType
 
-__all__ = ["Issue", "IssueType"]
-
-
-class IssueType(enum.Enum):
-    """The types of issue that can be reported."""
-
-    # Status Quo:
-
-    # a) Frontend:
-    # Gefahrenstelle
-    # Lückenschluss
-    # Einbahn öffnen
-    # Radbügel
-    # Markierung oder Schild
-    # Ampel
-    # Hindernis
-    # Anderes
-
-    # b) Datenbank
-    # Ampelschaltung    1537
-    # Anderes           1249
-    # Beschilderung        1
-    # Bodenmarkierung    907
-    # Einbahn öffnen    1351
-    # Gefahrenstelle    2899
-    # Hindernisse        747
-    # Lückenschluss     1293
-    # Radabstellanlage  1968
-
-    GEFAHRENSTELLE = "Gefahrenstelle"
-    LUECKENSCHLUSS = "Lückenschluss"
-    EINBAHN_OEFFNEN = "Einbahn öffnen"
-    RADBUEGEL = "Radbügel"
-    MARKIERUNG_ODER_SCHILD = "Markierung oder Schild"
-    AMPEL = "Ampel"
-    HINDERNIS = "Hindernis"
-    ANDERES = "Anderes"
-
-    # TODO: make this configurable/dynamic?
+__all__ = ["Issue"]
 
 
 class Issue(Base):
@@ -59,9 +29,20 @@ class Issue(Base):
     Note that the first comment to this issue is shown as the issue text.
     """
 
-    issue_type: Mapped[IssueType] = mapped_column(nullable=False)
-    lon: Mapped[float] = mapped_column(nullable=False)
-    lat: Mapped[float] = mapped_column(nullable=False)
+    issue_type: Mapped[IssueType]
 
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
-    # address!
+    datetime: Mapped[datetime.datetime]
+
+    lon: Mapped[float]
+    lat: Mapped[float]
+
+    likes: Mapped[int] = mapped_column(default=0)
+
+    address_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("address.id"),
+        init=False,
+    )
+    address: Mapped["Address"] = relationship(  # noqa: F821
+        back_populates="issues",
+        default=None,
+    )

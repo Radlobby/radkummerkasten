@@ -8,13 +8,16 @@ import pathlib
 
 import sqlalchemy
 
-__all__ = ["DatabaseEngine"]
+from .models import Base
+from .session import Session
+
+__all__ = ["Engine"]
 
 
 PACKAGE = __package__.split(".", maxsplit=1)[0]
 
 
-class DatabaseEngine:
+class Engine:
     """A database engine, handling file and table creation, and pooling."""
 
     def __init__(self, instance_path):
@@ -27,15 +30,13 @@ class DatabaseEngine:
             connect_args={"autocommit": False},
         )
         self._engine.connect()  # create database
-
-    def __enter__(self):
-        """Use this engine."""
-        return self._engine
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        """Exit database engine context."""
+        Base.metadata.create_all(self._engine)
 
     @property
     def session(self):
         """Return a session instance."""
-        return sqlalchemy.orm.sessionmaker(self._engine, autoflush=False)()
+        return sqlalchemy.orm.sessionmaker(
+            self._engine,
+            class_=Session,
+            autoflush=False,
+        )
