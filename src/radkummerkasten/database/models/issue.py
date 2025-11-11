@@ -31,10 +31,16 @@ class Issue(Base):
 
     issue_type: Mapped[IssueType]
 
-    datetime: Mapped[datetime.datetime]
-
     lon: Mapped[float]
     lat: Mapped[float]
+
+    created: Mapped[datetime.datetime] = mapped_column(
+        default_factory=datetime.datetime.now
+    )
+    updated: Mapped[datetime.datetime] = mapped_column(
+        default_factory=datetime.datetime.now,
+        onupdate=datetime.datetime.now
+    )
 
     likes: Mapped[int] = mapped_column(default=0)
 
