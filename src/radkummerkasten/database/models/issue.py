@@ -39,7 +39,7 @@ class Issue(Base):
     )
     updated: Mapped[datetime.datetime] = mapped_column(
         default_factory=datetime.datetime.now,
-        onupdate=datetime.datetime.now
+        onupdate=datetime.datetime.now,
     )
 
     likes: Mapped[int] = mapped_column(default=0)

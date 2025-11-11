@@ -4,6 +4,7 @@
 """The database model for comments on the radkummerkasten map."""
 
 
+import datetime
 import uuid
 from typing import List
 
@@ -30,6 +31,14 @@ class Comment(Base):
 
     text: Mapped[str]
     media: Mapped[List["Media"]] = relationship(back_populates="comment")  # noqa: F821
+
+    created: Mapped[datetime.datetime] = mapped_column(
+        default_factory=datetime.datetime.now
+    )
+    updated: Mapped[datetime.datetime] = mapped_column(
+        default_factory=datetime.datetime.now,
+        onupdate=datetime.datetime.now,
+    )
 
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"))
     user: Mapped["User"] = relationship(back_populates="comments")  # noqa: F821
