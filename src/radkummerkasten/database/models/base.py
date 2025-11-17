@@ -7,8 +7,6 @@
 __all__ = ["Base"]
 
 
-import os
-import pathlib
 import re
 import uuid
 
@@ -18,10 +16,7 @@ from sqlalchemy.orm import (
     MappedAsDataclass,
     declared_attr,
     mapped_column,
-    registry,
 )
-
-from .path_like import PathLike
 
 CAMEL_CASE_TO_SNAKE_CASE_RE = re.compile(
     "((?<=[a-z0-9])[A-Z]|(?!^)(?<!_)[A-Z](?=[a-z]))"
@@ -36,12 +31,6 @@ def snake_case(camel_case):
 class Base(DeclarativeBase, MappedAsDataclass):
     """Template for sqlalchemy declarative_base() to add shared functionality."""
 
-    registry = registry(
-        type_annotation_map={
-            os.PathLike: PathLike(pathlib.Path),
-        }
-    )
-
     id: Mapped[uuid.UUID] = mapped_column(
         init=False,
         primary_key=True,
@@ -49,7 +38,11 @@ class Base(DeclarativeBase, MappedAsDataclass):
         default=None,
     )
 
-    @declared_attr
+    @declared_attr.directive
     def __tablename__(cls):
         """Return a table name derived from the class name."""
         return f"{snake_case(cls.__name__)}"
+
+    def __repr__(self):
+        """Return a simplified __repr__ to avoid recursion."""
+        return f"{self.__class__.__name__}(id={self.id})"

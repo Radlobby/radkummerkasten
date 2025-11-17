@@ -6,6 +6,7 @@
 
 import datetime
 import uuid
+from typing import List
 
 from sqlalchemy import (
     ForeignKey,
@@ -40,6 +41,11 @@ class Issue(Base):
     updated: Mapped[datetime.datetime] = mapped_column(
         default_factory=datetime.datetime.now,
         onupdate=datetime.datetime.now,
+    )
+
+    comments: Mapped[List["Comment"]] = relationship(  # noqa: F821
+        back_populates="issue",
+        default_factory=list,
     )
 
     likes: Mapped[int] = mapped_column(default=0)

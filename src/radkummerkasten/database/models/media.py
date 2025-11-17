@@ -4,7 +4,7 @@
 """The database model for media attached to comments on the radkummerkasten map."""
 
 
-import os
+import pathlib
 import uuid
 
 from sqlalchemy import (
@@ -28,7 +28,11 @@ class Media(Base):
     Currently restricted to photos/images.
     """
 
-    file_path: Mapped[os.PathLike] = mapped_column()
+    comment_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("comment.id"), init=False,)
+    comment: Mapped["Comment"] = relationship(back_populates="media", default=None,)  # noqa: F821
 
-    comment_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("comment.id"))
-    comment: Mapped["Comment"] = relationship(back_populates="media")  # noqa: F821
+    @property
+    def file_path(self):
+        """Return a “computed column”, that derives a file path from the id."""
+        self_id = str(self.id)
+        return pathlib.Path(f"{self_id[:1]}/{self_id[:2]}/{self_id}.webp")

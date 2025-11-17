@@ -29,8 +29,19 @@ class Comment(Base):
     Note that the first comment to an issue is shown as the issue text.
     """
 
+    title: Mapped[str | None]
     text: Mapped[str]
-    media: Mapped[List["Media"]] = relationship(back_populates="comment")  # noqa: F821
+
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"), init=False)
+    user: Mapped["User"] = relationship(back_populates="comments", default=None)  # noqa: F821
+
+    issue_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("issue.id"), init=False)
+    issue: Mapped["Issue"] = relationship(back_populates="comments", default=None)  # noqa: F821
+
+    media: Mapped[List["Media"]] = relationship(  # noqa: F821
+        back_populates="comment",
+        default_factory=list
+    )
 
     created: Mapped[datetime.datetime] = mapped_column(
         default_factory=datetime.datetime.now
@@ -39,6 +50,3 @@ class Comment(Base):
         default_factory=datetime.datetime.now,
         onupdate=datetime.datetime.now,
     )
-
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"))
-    user: Mapped["User"] = relationship(back_populates="comments")  # noqa: F821
