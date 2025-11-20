@@ -32,17 +32,12 @@ class Base(DeclarativeBase, MappedAsDataclass):
     """Template for sqlalchemy declarative_base() to add shared functionality."""
 
     id: Mapped[uuid.UUID] = mapped_column(
-        init=False,
         primary_key=True,
-        insert_default=uuid.uuid4,
-        default=None,
+        init=False,
+        default_factory=uuid.uuid4,
     )
 
     @declared_attr.directive
     def __tablename__(cls):
         """Return a table name derived from the class name."""
         return f"{snake_case(cls.__name__)}"
-
-    def __repr__(self):
-        """Return a simplified __repr__ to avoid recursion."""
-        return f"{self.__class__.__name__}(id={self.id})"

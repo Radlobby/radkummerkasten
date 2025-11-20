@@ -33,14 +33,14 @@ class Comment(Base):
     text: Mapped[str]
 
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"), init=False)
-    user: Mapped["User"] = relationship(back_populates="comments", default=None)  # noqa: F821
+    user: Mapped["User"] = relationship(default=None)  # noqa: F821
 
     issue_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("issue.id"), init=False)
-    issue: Mapped["Issue"] = relationship(back_populates="comments", default=None)  # noqa: F821
+    issue: Mapped["Issue"] = relationship(default=None)  # noqa: F821
 
     media: Mapped[List["Media"]] = relationship(  # noqa: F821
         back_populates="comment",
-        default_factory=list
+        default_factory=list,
     )
 
     created: Mapped[datetime.datetime] = mapped_column(

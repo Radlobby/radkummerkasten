@@ -28,8 +28,8 @@ class Media(Base):
     Currently restricted to photos/images.
     """
 
-    comment_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("comment.id"), init=False,)
-    comment: Mapped["Comment"] = relationship(back_populates="media", default=None,)  # noqa: F821
+    comment_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("comment.id"), init=False)
+    comment: Mapped["Comment"] = relationship(default=None)   # noqa: F821
 
     @property
     def file_path(self):
