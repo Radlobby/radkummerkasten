@@ -41,5 +41,5 @@ class TestFactory:
     )
     def test_create_app_with_testing_env(self, instance_directory, env_testing_value):
         """Test the application factory of radkummerkasten."""
-        os.environ["TESTING"] = env_testing_value
+        os.environ["TESTING"] = f"{env_testing_value}"
         _ = radkummerkasten.create_app(instance_path=instance_directory)
