@@ -111,3 +111,32 @@ class TestDatabaseModels:
             assert f"{media_item.id}" in f"{media_item.file_path}"
 
             session.rollback()
+
+    def test_media_app_context(self, application, engine, photo_path):
+        """Test radkummerkasten.database.models.Address."""
+        with (
+            engine.session.begin() as session,
+            application.app_context()
+        ):
+            media_item = Media.from_image_file(photo_path)
+            session.add(media_item)
+
+            assert isinstance(media_item, Media)
+            assert isinstance(media_item.id, uuid.UUID)
+            assert isinstance(media_item.file_path, pathlib.Path)
+            assert f"{media_item.id}" in f"{media_item.file_path}"
+
+            session.rollback()
+
+    def test_media_no_app_context(self, engine, photo_path):
+        """Test radkummerkasten.database.models.Address."""
+        with engine.session.begin() as session:
+            with pytest.raises(
+                RuntimeError,
+                match=(
+                      "When using Media.from_image_file.. outside of "
+                      "an application context, pass an instance_path."
+                  )
+            ):
+                _ = Media.from_image_file(photo_path)
+            session.rollback()
