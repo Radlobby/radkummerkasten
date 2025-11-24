@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 
+"""Test caching."""
+
+
 import datetime
 import os
 import pathlib
@@ -9,6 +12,8 @@ import pytest
 
 
 class TestBytesCache:
+    """Test caching."""
+
     @pytest.mark.parametrize(
         ("key", "value"),
         [
@@ -16,16 +21,19 @@ class TestBytesCache:
         ],
     )
     def test_cache(self, cache, key, value):
+        """Test caching."""
         cache[key] = value
         assert cache[key] == value
 
     def test_cache_no_absolute_path(self, cache):
+        """Test caching."""
         with pytest.raises(
             AssertionError, match="Cache keys cannot be absolute or parent paths"
         ):
             cache["/etc/passwd"] = "FOOBAR"
 
     def test_cache_no_parent_path(self, cache):
+        """Test caching."""
         with pytest.raises(
             AssertionError, match="Cache keys cannot be absolute or parent paths"
         ):
@@ -40,6 +48,7 @@ class TestBytesCache:
         ],
     )
     def test_is_subpath(self, cache, path, subpath, expected_value):
+        """Test caching."""
         assert cache._is_subpath(path, subpath) == expected_value
 
     @pytest.mark.parametrize(
@@ -49,6 +58,7 @@ class TestBytesCache:
         ],
     )
     def test_expire_by_age(self, cache, key, value):
+        """Test caching."""
         cache[key] = value
         EXPIRED = (
             datetime.datetime.now() - cache.max_cache_age - datetime.timedelta(days=1)
@@ -72,6 +82,7 @@ class TestBytesCache:
         ],
     )
     def test_expire_now(self, cache, key, value):
+        """Test caching."""
         cache[key] = value
         cache.expire(key, now=True)
         with pytest.raises(KeyError):
