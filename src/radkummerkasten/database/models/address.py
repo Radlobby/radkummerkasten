@@ -4,6 +4,8 @@
 """The database model for addresses on the radkummerkasten map."""
 
 
+from typing import Optional
+
 from sqlalchemy.orm import (
     Mapped,
 )
@@ -16,7 +18,7 @@ __all__ = ["Address"]
 class Address(Base):
     """An address (related to an issue reported to radkummerkasten map)."""
 
-    street: Mapped[str | None]
-    housenumber: Mapped[str | None]
-    postcode: Mapped[int | None]
-    municipality: Mapped[str | None]
+    street: Mapped[Optional[str]]
+    housenumber: Mapped[Optional[str]]
+    postcode: Mapped[Optional[int]]
+    municipality: Mapped[Optional[str]]
