@@ -60,9 +60,6 @@ class Session(sqlalchemy.orm.Session):
             item = self.execute(
                 sqlalchemy.select(model).where(*where_clauses)
             ).scalar_one()
-            for key, value in empty_relationships.items():
-                self.add(value)
-                getattr(item, key).append(value)
         except sqlalchemy.exc.NoResultFound:
             item = None
         return item
