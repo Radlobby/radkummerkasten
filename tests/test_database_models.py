@@ -114,10 +114,7 @@ class TestDatabaseModels:
 
     def test_media_app_context(self, application, engine, photo_path):
         """Test radkummerkasten.database.models.Address."""
-        with (
-            engine.session.begin() as session,
-            application.app_context()
-        ):
+        with engine.session.begin() as session, application.app_context():
             media_item = Media.from_image_file(photo_path)
             session.add(media_item)
 
@@ -134,9 +131,9 @@ class TestDatabaseModels:
             with pytest.raises(
                 RuntimeError,
                 match=(
-                      "When using Media.from_image_file.. outside of "
-                      "an application context, pass an instance_path."
-                  )
+                    "When using Media.from_image_file.. outside of "
+                    "an application context, pass an instance_path."
+                ),
             ):
                 _ = Media.from_image_file(photo_path)
             session.rollback()
