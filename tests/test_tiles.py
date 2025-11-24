@@ -1,10 +1,15 @@
 #!/usr/bin/env python
 
 
+"""Test the /tiles endpoint."""
+
+
 import pytest
 
 
-class Test_Tiles:
+class TestTiles:
+    """Test the /tiles endpoint."""
+
     @pytest.mark.parametrize(
         ("layer", "z", "x", "y", "expected_tile_pbf", "expected_http_status"),
         [
@@ -62,6 +67,7 @@ class Test_Tiles:
     def test_tile_by_index(
         self, client, layer, z, x, y, expected_tile_pbf, expected_http_status
     ):
+        """Test retrieving one tile by index."""
         response = client.get(f"/tiles/{layer}/{z}/{x}/{y}")
         assert response.status_code == expected_http_status
         assert response.get_data() == expected_tile_pbf
@@ -83,21 +89,25 @@ class Test_Tiles:
         indirect=["expected_tile_json"],
     )
     def test_tilejson(self, client, layer, expected_tile_json, expected_http_status):
+        """Test retrieving the tilejson metadata."""
         response = client.get(f"/tiles/{layer}")
         assert response.status_code == expected_http_status
         assert response.text == expected_tile_json
 
     def test_without_tile_layers(self, application_with_empty_config):
+        """Test retrieving a tile for a missing layer."""
         client = application_with_empty_config.test_client()
         response = client.get("/tiles/layer/12/345/678")
         assert response.status_code == 404
 
     def test_tile_layer_with_path(self, tile_layer_file):
+        """Test the tile layer from outside a request context."""
         from radkummerkasten.core import TileLayer
 
         _ = TileLayer(tile_layer_file, tile_layer_file.stem)
 
     def test_tile_layer_with_wrong_path(self):
+        """Test creating a TileLayer with a wrong file path."""
         from radkummerkasten.core import TileLayer
 
         with pytest.raises(RuntimeError):

@@ -1,10 +1,15 @@
 #!/usr/bin/env python
 
 
+"""Test the /address gazetteer endpoint."""
+
+
 import pytest
 
 
-class Test_Address:
+class TestAddress:
+    """Test the /address gazetteer endpoint."""
+
     @pytest.mark.parametrize(
         ("lon", "lat", "expected_address"),
         [
@@ -52,6 +57,7 @@ class Test_Address:
         ],
     )
     def test_address_by_coordinates(self, lon, lat, expected_address, client):
+        """Test the /address/by-coordinates/ endpoint."""
         response = client.get(f"/api/address/by-coordinates/{lon},{lat}")
         assert response.json == expected_address
 
@@ -99,6 +105,7 @@ class Test_Address:
         expected_address,
         application_with_empty_config,
     ):
+        """Test what happens if we do not configure a gazetteer file."""
         client = application_with_empty_config.test_client()
         response = client.get(f"/api/address/by-coordinates/{lon},{lat}")
         assert response.json == expected_address
