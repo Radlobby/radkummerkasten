@@ -58,6 +58,12 @@ def client(application):
 def engine(instance_directory):
     """Provide a database engine."""
     from radkummerkasten.database import Engine
+    from radkummerkasten.database.engine import PACKAGE
+
+    try:
+        (pathlib.Path(instance_directory) / "database" / f"{PACKAGE}.sqlite").unlink()
+    except FileNotFoundError:
+        pass
 
     engine = Engine(instance_directory)
     yield engine
