@@ -18,6 +18,7 @@ dependencies = [
     "flask-cors",
     "geopandas",
     "mercantile",
+    "Pillow",
     "requests",
     "shapely",
     "sqlalchemy",
@@ -45,7 +46,6 @@ dev = [
     "flake8-bugbear",
     "flake8-pyproject",
     "isort",
-    "Pillow",
     "pydocstyle",
     "pylint",
     "werkzeug"
