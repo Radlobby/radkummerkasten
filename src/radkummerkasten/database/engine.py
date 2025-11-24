@@ -29,8 +29,13 @@ class Engine:
             f"sqlite:///{self.path}",
             connect_args={"autocommit": False},
         )
-        self._engine.connect()  # create database
-        Base.metadata.create_all(self._engine)
+        with self._engine.connect():
+            Base.metadata.create_all(self._engine)
+
+    def __del__(self):
+        """Ensure that all connections are closed when exiting."""
+        self._engine.dispose()
+        del self._engine
 
     @property
     def session(self):

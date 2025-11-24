@@ -18,6 +18,7 @@ DATA_DIRECTORY = (pathlib.Path(__file__).parent / "data").absolute()
 INSTANCE_DIRECTORY = (pathlib.Path(__file__).parent / "instance").absolute()
 
 TILE_LAYER_FILE = INSTANCE_DIRECTORY / "data" / "radlkarte-wien.geojson"
+PHOTO_PATH = DATA_DIRECTORY / "lorry-across-bikelane.jpg"
 
 
 @pytest.fixture(scope="session")
@@ -54,6 +55,15 @@ def client(application):
 
 
 @pytest.fixture(scope="session")
+def engine(instance_directory):
+    """Provide a database engine."""
+    from radkummerkasten.database import Engine
+
+    engine = Engine(instance_directory)
+    yield engine
+
+
+@pytest.fixture(scope="session")
 def data_directory():
     """Return the path to the test data directory."""
     yield DATA_DIRECTORY
@@ -85,6 +95,11 @@ def local_server_url(application):
     """Start a listening server and return the base URL."""
     with LocalServer(application) as url:
         yield url
+
+
+@pytest.fixture(scope="session")
+def photo_path():
+    yield PHOTO_PATH
 
 
 @pytest.fixture(scope="session")

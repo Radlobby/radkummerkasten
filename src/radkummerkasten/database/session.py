@@ -46,7 +46,9 @@ class Session(sqlalchemy.orm.Session):
                     sqlalchemy.orm.Relationship,
                 )
                 and (
-                    value is None or value == [] or value.id is None  # works for us, as pk always "id"
+                    value is None
+                    or value == []
+                    or value.id is None  # works for us, as pk always "id"
                 )
             )
         }
@@ -66,7 +68,6 @@ class Session(sqlalchemy.orm.Session):
             item = model(**values)
             self.add(item)
         return item
-
 
     def find(self, model, **values):
         """
@@ -98,7 +99,9 @@ class Session(sqlalchemy.orm.Session):
                     sqlalchemy.orm.Relationship,
                 )
                 and (
-                    value is None or value == [] or value.id is None  # works for us, as pk always "id"
+                    value is None
+                    or value == []
+                    or value.id is None  # works for us, as pk always "id"
                 )
             )
         }

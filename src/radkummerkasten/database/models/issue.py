@@ -44,7 +44,7 @@ class Issue(Base):
     )
 
     comments: Mapped[List["Comment"]] = relationship(  # noqa: F821
-        back_populates="issue",
+        # back_populates="issue",
         default_factory=list,
     )
 
@@ -55,6 +55,6 @@ class Issue(Base):
         init=False,
     )
     address: Mapped["Address"] = relationship(  # noqa: F821
-        #back_populates="issues",
+        # back_populates="issues",
         default=None,
     )

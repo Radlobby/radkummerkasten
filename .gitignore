@@ -37,6 +37,7 @@ junit.xml
 .pytest_cache
 
 /instance
+/tests/instance/database
 
 /node_modules
 /package.json

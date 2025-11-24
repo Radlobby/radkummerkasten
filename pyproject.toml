@@ -45,6 +45,7 @@ dev = [
     "flake8-bugbear",
     "flake8-pyproject",
     "isort",
+    "Pillow",
     "pydocstyle",
     "pylint",
     "werkzeug"
