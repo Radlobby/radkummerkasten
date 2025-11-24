@@ -25,10 +25,7 @@ class Engine:
         self.path = pathlib.Path(instance_path) / "database" / f"{PACKAGE}.sqlite"
         self.path.parent.mkdir(parents=True, exist_ok=True)
 
-        self._engine = sqlalchemy.create_engine(
-            f"sqlite:///{self.path}",
-            connect_args={"autocommit": False},
-        )
+        self._engine = sqlalchemy.create_engine(f"sqlite:///{self.path}")
         with self._engine.connect():
             Base.metadata.create_all(self._engine)
 
