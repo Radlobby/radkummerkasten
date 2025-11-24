@@ -14,7 +14,6 @@ authors = [
 
 dependencies = [
     "flask",
-    "geoalchemy2",
     "flask-cors",
     "geopandas",
     "mercantile",
