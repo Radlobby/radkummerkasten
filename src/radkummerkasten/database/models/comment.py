@@ -6,7 +6,10 @@
 
 import datetime
 import uuid
-from typing import List
+from typing import (
+    List,
+    Optional,
+)
 
 from sqlalchemy import (
     ForeignKey,
@@ -29,7 +32,7 @@ class Comment(Base):
     Note that the first comment to an issue is shown as the issue text.
     """
 
-    title: Mapped[str | None]
+    title: Mapped[Optional[str]]
     text: Mapped[str]
 
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"), init=False)
