@@ -99,6 +99,7 @@ def local_server_url(application):
 
 @pytest.fixture(scope="session")
 def photo_path():
+    """Return the path to a test image file."""
     yield PHOTO_PATH
 
 
