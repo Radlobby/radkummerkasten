@@ -10,7 +10,6 @@ from .comment import Comment
 from .issue import Issue
 from .issue_type import IssueType
 from .media import Media
-from .path_like import PathLike
 from .user import User
 
 __all__ = [
@@ -20,6 +19,5 @@ __all__ = [
     "Issue",
     "IssueType",
     "Media",
-    "PathLike",
     "User",
 ]
