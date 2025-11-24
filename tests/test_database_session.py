@@ -14,7 +14,10 @@ class TestDatabaseSession:
 
     @pytest.mark.parametrize(
         ("street", "housenumber", "postcode", "municipality"),
-        (("Biene-Maja-Straße", "27", 6969, "Gigritschpatschn"),),
+        (
+            ("Biene-Maja-Straße", "27", 6969, "Gigritschpatschn"),
+            ("Flip-Grashüpfer-Platz", "1", 1010, "Wien"),
+        ),
     )
     def test_find_address(self, engine, street, housenumber, postcode, municipality):
         """Test radkummerkasten.database.models.Address."""
