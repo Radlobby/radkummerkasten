@@ -45,8 +45,6 @@ class Tiles(flask.Blueprint):
             }
         )
 
-        print(tile_layers)
-
         self.tile_layers = {}
         for tile_layer_name, tile_layer_source in tile_layers.items():
             self.tile_layers[tile_layer_name] = TileLayer(

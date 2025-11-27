@@ -22,13 +22,13 @@ class Radkummerkasten(flask.Blueprint):
         "template_folder": "templates",
     }
 
-    def __init__(self, configuration, *args, **kwargs):
+    def __init__(self, application, *args, **kwargs):
         """Provide a blueprint for radkummerkasten lookup."""
         kwargs = kwargs or {}
         kwargs.update(self._kwargs)
         super().__init__(self._NAME, self._IMPORT_NAME, *args, **kwargs)
 
-        self.configuration = configuration
+        self.configuration = application.config
 
         self.add_url_rule(
             "/",
