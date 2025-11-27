@@ -63,7 +63,7 @@ class Media(Base):
                 ) from exception
         image = Image.open(image_file)
         image.thumbnail(MEDIA_SIZE)
-        media_item = Media()
+        media_item = cls()
         image_path = instance_path / "database" / "images" / media_item.file_path
         image_path.parent.mkdir(parents=True, exist_ok=True)
         image.save(image_path)

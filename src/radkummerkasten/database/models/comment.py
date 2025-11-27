@@ -37,7 +37,8 @@ class Comment(Base):
 
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"), init=False)
     user: Mapped["User"] = relationship(  # noqa: F821
-        default=None, back_populates="comments"
+        default=None,
+        # back_populates="comments"
     )
 
     issue_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("issue.id"), init=False)

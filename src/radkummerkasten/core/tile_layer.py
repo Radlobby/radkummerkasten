@@ -54,6 +54,25 @@ class TileLayer:
         except Exception as exception:
             raise RuntimeError(f"Could not open tile layer {self.data}.") from exception
 
+    def empty_cache(self):
+        """Delete the entire content of the cache."""
+        self.cache.empty()
+
+    def expire_cache_for_lon_lat(self, lon, lat):
+        """
+        Delete the cached tile that covers/contains a point.
+
+        Arguments
+        ---------
+        lon : float
+        lat : float
+            coordinates of a point
+        """
+        tile = mercantile.tile(lon, lat, MAX_ZOOM)
+        while tile is not None:
+            self.cache.expire(f"{tile.z}/{tile.x}/{tile.y}", now=True)
+            tile = mercantile.parent(tile)
+
     def tile(self, z, x, y):
         """
         Retrieve the vector tile at tile index `x`, `y` for zoom level `z`.

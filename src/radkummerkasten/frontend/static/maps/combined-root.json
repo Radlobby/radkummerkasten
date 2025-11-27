@@ -36,6 +36,10 @@
     "radlkarte": {
       "type": "vector",
       "url": "/tiles/radlkarte"
+    },
+    "issues": {
+      "type": "vector",
+      "url": "/tiles/issues"
     }
   },
   "layers": [
@@ -12851,6 +12855,13 @@
           1.0
         ]
       }
+    },
+    {
+        "id": "radkummerkasten-issues",
+        "type": "circle",
+        "source": "issues",
+        "source-layer": "issues",
+        "paint": {}
     },
     {
       "id": "TXT/BAHNHOF_RAILJET/BHF_L13-20/label/Name2",

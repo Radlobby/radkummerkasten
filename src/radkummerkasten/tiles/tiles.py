@@ -7,6 +7,7 @@
 import flask
 
 from ..core import TileLayer
+from ..database import Database
 from ..utilities.decorators import csp_allow_self, local_referer_only
 
 __all__ = [
@@ -23,18 +24,28 @@ class Tiles(flask.Blueprint):
         "url_prefix": "/tiles",
     }
 
-    def __init__(self, configuration, *args, **kwargs):
+    def __init__(self, application, *args, **kwargs):
         """Provide a blueprint for vector tiles."""
         kwargs = kwargs or {}
         kwargs.update(self._kwargs)
         super().__init__(self._NAME, self._IMPORT_NAME, *args, **kwargs)
 
-        self.configuration = configuration
+        self.configuration = application.config
 
-        try:
-            tile_layers = configuration["TILE_LAYERS"]
-        except KeyError:
-            tile_layers = {}
+        tile_layers = {
+            "issues": application.extensions[Database.EXTENSION_NAME].path.with_suffix(
+                ".gpkg"
+            )
+        }
+        tile_layers.update(
+            {
+                key: value
+                for key, value in self.configuration["ADDITIONAL_TILE_LAYERS"].items()
+                if key != "issues"
+            }
+        )
+
+        print(tile_layers)
 
         self.tile_layers = {}
         for tile_layer_name, tile_layer_source in tile_layers.items():
