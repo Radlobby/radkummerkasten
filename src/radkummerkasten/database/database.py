@@ -24,11 +24,15 @@ class Database:
 
     def __init__(self, application=None):
         """Start a database engine."""
+        self.path = None
+        self.engine = None
         if application is not None:
             self.init_app(application)
 
-        self.path = None
-        self.engine = None
+    def __del__(self):
+        """Ensure that all connections are closed when exiting."""
+        self.engine.dispose()
+        del self.engine
 
     def init_app(self, application):
         """Initialise a Flask application."""

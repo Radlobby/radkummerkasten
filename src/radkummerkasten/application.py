@@ -32,8 +32,8 @@ def create_app(instance_path=DEFAULT_INSTANCE_PATH):
     database.init_app(application)
 
     application.register_blueprint(frontend.Radkummerkasten(application))
+    application.register_blueprint(tiles.Tiles(application))
     application.register_blueprint(api.Address(application))
     application.register_blueprint(api.Issues(application))
-    application.register_blueprint(tiles.Tiles(application))
 
     return application

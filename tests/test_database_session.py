@@ -19,9 +19,9 @@ class TestDatabaseSession:
             ("Flip-Grashüpfer-Platz", "1", 1010, "Wien"),
         ),
     )
-    def test_find_address(self, engine, street, housenumber, postcode, municipality):
+    def test_find_address(self, database, street, housenumber, postcode, municipality):
         """Test radkummerkasten.database.models.Address."""
-        with engine.session.begin() as session:
+        with database.session.begin() as session:
             address = Address(
                 street,
                 housenumber,
@@ -32,7 +32,7 @@ class TestDatabaseSession:
             session.add(address)
             session.commit()
 
-        with engine.session.begin() as session:
+        with database.session.begin() as session:
             address = session.find(
                 Address,
                 street=street,
@@ -50,10 +50,10 @@ class TestDatabaseSession:
         (("Drohne-Willi-Straße", "11", 1234, "Bienenstock"),),
     )
     def test_find_unknown_address(
-        self, engine, street, housenumber, postcode, municipality
+        self, database, street, housenumber, postcode, municipality
     ):
         """Test radkummerkasten.database.models.Address."""
-        with engine.session.begin() as session:
+        with database.session.begin() as session:
             address = session.find(
                 Address,
                 street=street,

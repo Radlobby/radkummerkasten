@@ -41,18 +41,27 @@ class TileLayer:
         layer_name : str
             the name of this layer (included, e.g., in the tilejson metadata)
         """
-        self.bounds = None
         self.data = data
         self.layer_name = layer_name
         self.cache = BytesCache(layer_name)
 
-        try:
-            data = geopandas.read_file(self.data)
-            self.bounds = [float(coordinate) for coordinate in data.total_bounds]
-            self.fields = [str(column_name) for column_name in data.columns]
-            del data
-        except Exception as exception:
-            raise RuntimeError(f"Could not open tile layer {self.data}.") from exception
+    @functools.cached_property
+    def bounds(self):
+        """The geographic bounds of the layer."""
+        data = geopandas.read_file(self.data)
+        bounds = [float(coordinate) for coordinate in data.total_bounds]
+        return bounds
+
+    @functools.cached_property
+    def fields(self):
+        """The geographic bounds of the layer."""
+        data = geopandas.read_file(self.data)
+        fields = [
+            str(column_name)
+            for column_name in data.columns
+            if column_name != "geometry"
+        ]
+        return fields
 
     def empty_cache(self):
         """Delete the entire content of the cache."""

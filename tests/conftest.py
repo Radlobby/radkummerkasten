@@ -24,6 +24,12 @@ PHOTO_PATH = DATA_DIRECTORY / "lorry-across-bikelane.jpg"
 @pytest.fixture(scope="session")
 def application(instance_directory):
     """Start a flask application."""
+    # delete instance database(s) to provide a clean slate for testing
+    try:
+        (INSTANCE_DIRECTORY / "database" / "radkummerkasten.sqlite").unlink()
+    except FileNotFoundError:
+        pass
+
     os.environ["TESTING"] = "TRUE"
     application = radkummerkasten.create_app(instance_path=instance_directory)
     del os.environ["TESTING"]
@@ -55,18 +61,11 @@ def client(application):
 
 
 @pytest.fixture(scope="session")
-def engine(instance_directory):
-    """Provide a database engine."""
-    from radkummerkasten.database import Engine
-    from radkummerkasten.database.engine import PACKAGE
+def database(application):
+    """Provide a database instance."""
+    from radkummerkasten.database import Database
 
-    try:
-        (pathlib.Path(instance_directory) / "database" / f"{PACKAGE}.sqlite").unlink()
-    except FileNotFoundError:
-        pass
-
-    engine = Engine(instance_directory)
-    yield engine
+    yield application.extensions[Database.EXTENSION_NAME]
 
 
 @pytest.fixture(scope="session")

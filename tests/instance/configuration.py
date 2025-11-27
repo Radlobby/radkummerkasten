@@ -9,7 +9,7 @@ import pathlib
 _DATA_DIR = pathlib.Path(__file__).parent.resolve() / "data"
 
 
-TILE_LAYERS = {
+ADDITIONAL_TILE_LAYERS = {
     "radlkarte": _DATA_DIR / "radlkarte-wien.geojson",
 }
 

@@ -37,6 +37,7 @@ class Issues(flask.Blueprint):
         kwargs.update(self._kwargs)
         super().__init__(self._NAME, self._IMPORT_NAME, *args, **kwargs)
 
+        self.application = application
         self.configuration = application.config
 
         self.update_geopackage()
@@ -60,7 +61,7 @@ class Issues(flask.Blueprint):
     @property
     def database(self):
         """Retrieve a radkummerkasten.database.Database instance."""
-        database = flask.current_app.extensions[Database.EXTENSION_NAME]
+        database = self.application.extensions[Database.EXTENSION_NAME]
         return database
 
     def expire_tile_layer(self, lon=None, lat=None):
@@ -145,7 +146,7 @@ class Issues(flask.Blueprint):
     @property
     def tile_layer(self):
         """Retrieve the radkummerkasten.core.TileLayer for these issues."""
-        return flask.current_app.blueprints["tiles"].tile_layers["issues"]
+        return self.application.blueprints["tiles"].tile_layers["issues"]
 
     def update_geopackage(self):
         """Update the geopackage copy of the issue table."""
