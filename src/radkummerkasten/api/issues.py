@@ -39,6 +39,8 @@ class Issues(flask.Blueprint):
 
         self.configuration = application.config
 
+        self.update_geopackage()
+
         self.add_url_rule(
             "/<uuid:issue_id>",
             view_func=self.get_issue,
