@@ -31,8 +31,11 @@ class Database:
 
     def __del__(self):
         """Ensure that all connections are closed when exiting."""
-        self.engine.dispose()
-        del self.engine
+        try:
+            self.engine.dispose()
+            del self.engine
+        except AttributeError:
+            pass
 
     def init_app(self, application):
         """Initialise a Flask application."""
