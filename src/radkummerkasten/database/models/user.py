@@ -4,12 +4,9 @@
 """The database model for users on the radkummerkasten map."""
 
 
-from typing import List
-
 from sqlalchemy.orm import (
     Mapped,
     mapped_column,
-    relationship,
 )
 
 from .base import Base
@@ -24,9 +21,9 @@ class User(Base):
     last_name: Mapped[str]
     email_address: Mapped[str] = mapped_column(unique=True)
 
-    comments: Mapped[List["Comment"]] = relationship(  # noqa: F821
-        back_populates="user",
-        default_factory=list,
-    )
+    # comments: Mapped[List["Comment"]] = relationship(  # noqa: F821
+    #    back_populates="user",
+    #    default_factory=list,
+    # )
 
     can_post: Mapped[bool] = mapped_column(default=False)

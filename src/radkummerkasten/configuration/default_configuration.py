@@ -15,3 +15,4 @@ class DefaultConfiguration(BaseConfiguration):
     """Default configuration."""
 
     PERMANENT_SESSION_LIFETIME = datetime.timedelta(weeks=26)
+    ADDITIONAL_TILE_LAYERS = {}

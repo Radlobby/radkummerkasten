@@ -4,8 +4,8 @@
 """Database routines for radkummerkasten."""
 
 
-from .engine import Engine
+from .database import Database
 
 __all__ = [
-    "Engine",
+    "Database",
 ]

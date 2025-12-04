@@ -41,18 +41,46 @@ class TileLayer:
         layer_name : str
             the name of this layer (included, e.g., in the tilejson metadata)
         """
-        self.bounds = None
         self.data = data
         self.layer_name = layer_name
         self.cache = BytesCache(layer_name)
 
-        try:
-            data = geopandas.read_file(self.data)
-            self.bounds = [float(coordinate) for coordinate in data.total_bounds]
-            self.fields = [str(column_name) for column_name in data.columns]
-            del data
-        except Exception as exception:
-            raise RuntimeError(f"Could not open tile layer {self.data}.") from exception
+    @functools.cached_property
+    def bounds(self):
+        """The geographic bounds of the layer."""
+        data = geopandas.read_file(self.data)
+        bounds = [float(coordinate) for coordinate in data.total_bounds]
+        return bounds
+
+    @functools.cached_property
+    def fields(self):
+        """The geographic bounds of the layer."""
+        data = geopandas.read_file(self.data)
+        fields = [
+            str(column_name)
+            for column_name in data.columns
+            if column_name != "geometry"
+        ]
+        return fields
+
+    def empty_cache(self):
+        """Delete the entire content of the cache."""
+        self.cache.empty()
+
+    def expire_cache_for_lon_lat(self, lon, lat):
+        """
+        Delete the cached tile that covers/contains a point.
+
+        Arguments
+        ---------
+        lon : float
+        lat : float
+            coordinates of a point
+        """
+        tile = mercantile.tile(lon, lat, MAX_ZOOM)
+        while tile is not None:
+            self.cache.expire(f"{tile.z}/{tile.x}/{tile.y}", now=True)
+            tile = mercantile.parent(tile)
 
     def tile(self, z, x, y):
         """

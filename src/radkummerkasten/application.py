@@ -7,6 +7,7 @@
 import pathlib
 
 from . import api, factory, frontend, tiles
+from .database import Database
 
 __all__ = [
     "create_app",
@@ -27,8 +28,12 @@ def create_app(instance_path=DEFAULT_INSTANCE_PATH):
         static_folder=None,
     )
 
-    application.register_blueprint(frontend.Radkummerkasten(application.config))
-    application.register_blueprint(api.Address(application.config))
-    application.register_blueprint(tiles.Tiles(application.config))
+    database = Database()
+    database.init_app(application)
+
+    application.register_blueprint(frontend.Radkummerkasten(application))
+    application.register_blueprint(tiles.Tiles(application))
+    application.register_blueprint(api.Address(application))
+    application.register_blueprint(api.Issues(application))
 
     return application
