@@ -11,7 +11,6 @@ import wtforms
 from ...database import Database
 from ...database.models import User
 
-
 __all__ = [
     "UserId",
 ]
@@ -19,6 +18,7 @@ __all__ = [
 
 class UserId(wtforms.Field):
     """A custom wtforms.Field for user ids."""
+
     widget = wtforms.widgets.HiddenInput()
 
     def process_formdata(self, valuelist):
@@ -34,6 +34,7 @@ class UserId(wtforms.Field):
                 user = session.get(User, user_id)
                 if user is None:
                     self.errors.append("User not found")
+
 
 # TODO: this might be better implemented as custom validators, see
 # https://wtforms.readthedocs.io/en/3.2.x/validators/#custom-validators
