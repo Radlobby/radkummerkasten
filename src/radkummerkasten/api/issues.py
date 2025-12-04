@@ -120,6 +120,9 @@ class Issues(flask.Blueprint):
         """Update an issue."""
         # TODO: implement this, using Flask-WTF to validate inputs
 
+        # if admin and user_id set -> use that user_id
+        # otherwise: use current session user id
+
         # with self.database.session.begin() as session:
         #     issue = session.get(Issue, issue_id)
         #     session.commit()
