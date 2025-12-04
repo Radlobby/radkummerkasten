@@ -18,8 +18,6 @@ class Radkummerkasten(flask.Blueprint):
     _IMPORT_NAME = __name__
     _kwargs = {
         "url_prefix": "/",
-        "static_folder": "static",
-        "template_folder": "templates",
     }
 
     def __init__(self, application, *args, **kwargs):
@@ -38,4 +36,4 @@ class Radkummerkasten(flask.Blueprint):
 
     def radkummerkasten(self):
         """Return the single-page radkummerkasten front page."""
-        return flask.render_template("index.html")
+        return flask.render_template("frontend/index.html")

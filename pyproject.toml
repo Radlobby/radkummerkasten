@@ -110,10 +110,10 @@ addopts = "-p no:faulthandler --cov=radkummerkasten --cov-report term-missing --
 testpaths = ["tests"]
 
 [tools.radkummerkasten-build-backend]
-sass_files = ["src/radkummerkasten/frontend/static/style/radkummerkasten.sass"]
+sass_files = ["src/radkummerkasten/static/style/radkummerkasten.sass"]
 ecmascript_files = [
-    "src/radkummerkasten/frontend/static/script/radkummerkasten-map.js",
-    "src/radkummerkasten/frontend/static/script/radkummerkasten.js",
+    "src/radkummerkasten/static/script/radkummerkasten-map.js",
+    "src/radkummerkasten/static/script/radkummerkasten.js",
 ]
 
 [tool.setuptools]

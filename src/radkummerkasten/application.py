@@ -24,8 +24,6 @@ def create_app(instance_path=DEFAULT_INSTANCE_PATH):
     application = factory.create_app(
         __MODULE__,
         instance_path=instance_path,
-        static_url_path=None,
-        static_folder=None,
     )
 
     database = Database()

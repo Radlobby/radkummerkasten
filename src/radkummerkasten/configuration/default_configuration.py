@@ -16,3 +16,5 @@ class DefaultConfiguration(BaseConfiguration):
 
     PERMANENT_SESSION_LIFETIME = datetime.timedelta(weeks=26)
     ADDITIONAL_TILE_LAYERS = {}
+    STATIC_FOLDER = None
+    TEMPLATE_FOLDER = None
