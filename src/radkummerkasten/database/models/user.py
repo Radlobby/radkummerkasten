@@ -4,6 +4,8 @@
 """The database model for users on the radkummerkasten map."""
 
 
+import datetime
+
 from sqlalchemy.orm import (
     Mapped,
     mapped_column,
@@ -27,3 +29,6 @@ class User(Base):
     # )
 
     can_post: Mapped[bool] = mapped_column(default=False)
+    details_confirmed: Mapped[datetime.datetime] = mapped_column(
+        default=None, nullable=True
+    )

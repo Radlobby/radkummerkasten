@@ -20,7 +20,7 @@ PACKAGE = __package__.split(".", maxsplit=1)[0]
 class Database:
     """A database engine, handling file and table creation, and pooling."""
 
-    EXTENSION_NAME = f"{PACKAGE}-database"
+    EXTENSION_NAME = "database"
 
     def __init__(self, application=None):
         """Start a database engine."""
@@ -60,4 +60,4 @@ class Database:
     @property
     def session(self):
         """Return a session instance."""
-        return sqlalchemy.orm.sessionmaker(self.engine, class_=Session)
+        return sqlalchemy.orm.sessionmaker(self.engine, class_=Session, autoflush=False)
