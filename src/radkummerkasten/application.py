@@ -8,6 +8,7 @@ import pathlib
 
 from . import api, factory, frontend, tiles
 from .database import Database
+from .utilities.mail import Mail
 
 __all__ = [
     "create_app",
@@ -28,6 +29,9 @@ def create_app(instance_path=DEFAULT_INSTANCE_PATH):
 
     database = Database()
     database.init_app(application)
+
+    mail = Mail()
+    mail.init_app(application)
 
     application.register_blueprint(frontend.Radkummerkasten(application))
     application.register_blueprint(tiles.Tiles(application))

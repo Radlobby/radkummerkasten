@@ -36,4 +36,19 @@ class Radkummerkasten(flask.Blueprint):
 
     def radkummerkasten(self):
         """Return the single-page radkummerkasten front page."""
+        # mail = flask.current_app.extensions["mail"]
+        # mail.send_message(
+        #     subject="Test",
+        #     recipients=[
+        #         "christoph.fink@christophfink.com",
+        #         "christoph.fink@univie.ac.at",
+        #         "christoph.fink@gmail.com",
+        #     ],
+        #     body=(
+        #         "This is a test e-mail."
+        #         "\n\n"
+        #         "i’m just trying out how flask_mail works (and whether it does)."
+        #     ),
+        # )
+
         return flask.render_template("frontend/index.html")
