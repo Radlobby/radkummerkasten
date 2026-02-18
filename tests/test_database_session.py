@@ -3,7 +3,6 @@
 
 """Test the database session for radkummerkasten."""
 
-
 import pytest
 
 from radkummerkasten.database.models import Address

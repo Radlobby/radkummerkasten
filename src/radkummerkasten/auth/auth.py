@@ -3,7 +3,6 @@
 
 """Provide authentication endpoints."""
 
-
 import flask
 
 from ..core import (
@@ -66,9 +65,7 @@ class Auth(flask.Blueprint):
         """Read login form input, send auth email."""
         form = LoginForm(flask.request.form)
         if form.validate():
-            self.authentication_backend.send_magic_link(
-                form.email_address.data
-            )
+            self.authentication_backend.send_magic_link(form.email_address.data)
         else:
             print("not valid?")
             print(form.errors)

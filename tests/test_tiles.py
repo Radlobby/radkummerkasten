@@ -3,7 +3,6 @@
 
 """Test the /tiles endpoint."""
 
-
 import pytest
 
 

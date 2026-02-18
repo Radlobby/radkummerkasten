@@ -3,7 +3,6 @@
 
 """Test the application factory of radkummerkasten."""
 
-
 import os
 
 import pytest

@@ -3,7 +3,6 @@
 
 """Define configuration options for testing radkummerkasten."""
 
-
 import pathlib
 
 _DATA_DIR = pathlib.Path(__file__).parent.resolve() / "data"

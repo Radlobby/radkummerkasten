@@ -3,7 +3,6 @@
 
 """Test the database interface."""
 
-
 import pytest
 
 from radkummerkasten.database import Database

@@ -3,20 +3,21 @@
 
 """Authenticate users via tokens sent to their e-mail."""
 
-
 import datetime
-# import hashlib
-# import hmac
-# import secrets
 
 import flask
 
 from ..database import Database
 from ..database.models import (
-    User,
     Token,
+    User,
 )
 from ..utilities.mail import Mail
+
+# import hashlib
+# import hmac
+# import secrets
+
 
 __all__ = ["PasswordlessAuthentication"]
 
@@ -70,11 +71,13 @@ class PasswordlessAuthentication:
         mail = flask.current_app.extensions["mail"]
         mail.send_message(
             subject="Radkummerkasten: login link",
-            recipients=[email,],
+            recipients=[
+                email,
+            ],
             body=flask.render_template(
                 "magic_link_email.txt.jinja",
                 token=token_,
-            )
+            ),
         )
 
     def verify_magic_link(self, token):
@@ -85,10 +88,7 @@ class PasswordlessAuthentication:
                 token=token,
                 used=None,
             )
-            if (
-                token is not None
-                and token.expires > datetime.datetime.now()
-            ):
+            if token is not None and token.expires > datetime.datetime.now():
                 flask.session["user"] = token.user.id
                 token.used = datetime.datetime.now()
                 session.add(token)

@@ -31,7 +31,7 @@ class Token(Base):
     )
 
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"), init=False)
-    user: Mapped["User"] = relationship(default=None)
+    user: Mapped["User"] = relationship(default=None)  # noqa: F821
 
     next_url: Mapped[str] = mapped_column(default=None)
 

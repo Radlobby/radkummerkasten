@@ -3,12 +3,6 @@
 
 """Interact with user profiles."""
 
-
-import datetime
-# import hashlib
-# import hmac
-# import secrets
-
 import flask
 
 from ..database import Database

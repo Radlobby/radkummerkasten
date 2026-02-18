@@ -9,8 +9,8 @@ from .comment import Comment
 from .issue import Issue
 from .issue_type import IssueType
 from .media import Media
-from .user import User
 from .token import Token
+from .user import User
 
 __all__ = [
     "Address",

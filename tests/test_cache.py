@@ -3,7 +3,6 @@
 
 """Test caching."""
 
-
 import datetime
 import os
 import pathlib

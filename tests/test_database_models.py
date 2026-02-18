@@ -3,7 +3,6 @@
 
 """Test the database models for radkummerkasten."""
 
-
 import datetime
 import pathlib
 import uuid

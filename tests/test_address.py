@@ -3,7 +3,6 @@
 
 """Test the /address gazetteer endpoint."""
 
-
 import pytest
 
 
