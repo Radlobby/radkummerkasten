@@ -1,40 +1,7 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+{% extends "base.html.jinja" %}
 
-        <title>Radkummerkasten</title>
+{% block title %}Radkummerkasten{% endblock %}
 
-        <meta name="author" content="Radlobby">
-        <meta
-            name="description"
-            content=""
-        >
-        <meta
-            name="keywords"
-            content=""
-        >
-
-        <link ref="canonical" href="https://radkummerkasten.at/">
-        <link rel="manifest" href="{{url_for("static", filename="radkummerkasten.at.webmanifest", _external=True)}}">
-
-        <link rel="icon" type="image/svg+xml" href="{{url_for("static", filename="images/favicon.svg")}}" sizes="any">
-        <link rel="apple-touch-icon" href="{{url_for("static", filename="images/apple-touch-icon.png")}}">
-
-        <script src="{{url_for("static", filename="script/maplibre-gl.min.js")}}"></script>
-        <link href="{{url_for("static", filename="style/maplibre-gl.min.css")}} rel="stylesheet" />
-
-        <link rel="stylesheet" href="{{url_for("static", filename="fonts/roboto.min.css")}}">
-        <link rel="stylesheet" href="{{url_for("static", filename="style/radkummerkasten.min.css")}}">
-
-        <script src="{{url_for("static", filename="script/bootstrap.min.js")}}"></script>
-        <!--//<script src="{{url_for("static", filename="js/bootstrap-darkmode.js")}}"></script>//-->
-        <script src="{{url_for("static", filename="script/radkummerkasten.min.js")}}"></script>
-    </head>
-    <body>
-        <h1>Radkummerkasten</h1>
-        <div id="map"></div>
-        <div id="auth">{% block auth %}{% endblock %}<div>
-    </body>
-</html>
+{% block map_pane %}
+<div id="map"></div>
+{% endblock %}

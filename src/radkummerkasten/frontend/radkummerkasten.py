@@ -55,4 +55,4 @@ class Radkummerkasten(flask.Blueprint):
         # )
         # print(flask.current_app.template_folder)
         user = self.user_manager.current_user
-        return flask.render_template("base.html.jinja", user=user)
+        return flask.render_template("map.html.jinja", user=user)

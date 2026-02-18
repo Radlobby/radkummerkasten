@@ -25,9 +25,12 @@ class UserManager:
     @property
     def current_user(self):
         """Fetch the currently logged-in user’s details."""
-        with self.database.session() as session:
-            user_id = flask.session.get("user")
-            user = session.get(User, user_id)
-            if user is not None:
-                session.expunge(user)
+        user_id = flask.session.get("user")
+        if user_id is None:
+            user = None
+        else:
+            with self.database.session() as session:
+                user = session.get(User, user_id)
+                if user is not None:
+                    session.expunge(user)
         return user
