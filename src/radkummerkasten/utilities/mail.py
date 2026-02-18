@@ -3,7 +3,6 @@
 
 """Wrap flask_mail’s public API, send async in separate thread."""
 
-
 import threading
 
 import flask
@@ -18,16 +17,20 @@ __all__ = [
     "Message",
 ]
 
+# hardcoded in https://github.com/pallets-eco/flask-mail/blob/
+# f4dfa2a8a22d39caae08d571859233fed931935b/src/flask_mail/__init__.py#L630
+EXTENSION_NAME = "mail"
+
 
 def _send_async(application, message):
     with application.app_context():
-        mail = flask.current_app.extensions["mail"]
+        mail = flask.current_app.extensions[EXTENSION_NAME]
         mail.send(message, sync=True)
 
 
 def _send_message_async(application, *args, **kwargs):
     with application.app_context():
-        mail = flask.current_app.extensions["mail"]
+        mail = flask.current_app.extensions[EXTENSION_NAME]
         message = Message(*args, **kwargs)
         mail.send(message, sync=True)
 
@@ -83,6 +86,8 @@ class _Mail(flask_mail._Mail):
 
 class Mail(flask_mail.Mail):
     """Wrap flask_mail.Mail, send async in separate thread."""
+
+    EXTENSION_NAME = EXTENSION_NAME
 
     def init_mail(self, config, debug=False, testing=False):
         """Initialise mail extension."""

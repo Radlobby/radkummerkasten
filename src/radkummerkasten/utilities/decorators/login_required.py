@@ -3,7 +3,6 @@
 
 """A decorator for flask views and methods that requires login."""
 
-
 # import functools
 #
 # import flask

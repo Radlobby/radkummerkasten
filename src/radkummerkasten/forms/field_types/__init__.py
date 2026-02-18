@@ -3,7 +3,6 @@
 
 """Custom form field types."""
 
-
 from .user_id import UserId
 
 __all__ = [

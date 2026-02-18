@@ -3,7 +3,6 @@
 
 """Look up the closest street address for a pair of coordinates."""
 
-
 import os
 import pathlib
 

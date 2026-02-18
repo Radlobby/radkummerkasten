@@ -3,7 +3,6 @@
 
 """Look up the closest street issue for a pair of coordinates."""
 
-
 import flask
 import geopandas
 from sqlalchemy import select

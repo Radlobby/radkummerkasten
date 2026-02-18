@@ -3,7 +3,6 @@
 
 """A factory that sets defaults for all radkummerkasten application objects."""
 
-
 import os
 import pathlib
 

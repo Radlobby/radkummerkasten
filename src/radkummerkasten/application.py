@@ -3,10 +3,9 @@
 
 """The application object for radkummerkasten."""
 
-
 import pathlib
 
-from . import api, factory, frontend, tiles
+from . import api, auth, factory, frontend, tiles
 from .database import Database
 from .utilities.mail import Mail
 
@@ -37,5 +36,6 @@ def create_app(instance_path=DEFAULT_INSTANCE_PATH):
     application.register_blueprint(tiles.Tiles(application))
     application.register_blueprint(api.Address(application))
     application.register_blueprint(api.Issues(application))
+    application.register_blueprint(auth.Auth(application))
 
     return application

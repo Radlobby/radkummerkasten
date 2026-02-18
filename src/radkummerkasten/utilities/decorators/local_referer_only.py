@@ -3,7 +3,6 @@
 
 """A decorator for flask views and methods that allows local referers only."""
 
-
 import functools
 
 import flask

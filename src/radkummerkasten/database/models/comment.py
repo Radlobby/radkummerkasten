@@ -3,7 +3,6 @@
 
 """The database model for comments on the radkummerkasten map."""
 
-
 import datetime
 import uuid
 from typing import (

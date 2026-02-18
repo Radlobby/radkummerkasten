@@ -3,8 +3,9 @@
 
 """Return the single-page radkummerkasten front page."""
 
-
 import flask
+
+from ..core import UserManager
 
 __all__ = [
     "Radkummerkasten",
@@ -28,6 +29,8 @@ class Radkummerkasten(flask.Blueprint):
 
         self.configuration = application.config
 
+        self.user_manager = UserManager()
+
         self.add_url_rule(
             "/",
             view_func=self.radkummerkasten,
@@ -50,5 +53,6 @@ class Radkummerkasten(flask.Blueprint):
         #         "i’m just trying out how flask_mail works (and whether it does)."
         #     ),
         # )
-
-        return flask.render_template("frontend/index.html")
+        # print(flask.current_app.template_folder)
+        user = self.user_manager.current_user
+        return flask.render_template("base.html.jinja", user=user)

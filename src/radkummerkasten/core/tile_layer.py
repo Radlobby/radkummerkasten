@@ -3,7 +3,6 @@
 
 """Compute vector tiles of a dataset for a given zoom level and tile index."""
 
-
 import functools
 
 import flask

@@ -3,7 +3,6 @@
 
 """Define a database engine."""
 
-
 import pathlib
 
 import sqlalchemy

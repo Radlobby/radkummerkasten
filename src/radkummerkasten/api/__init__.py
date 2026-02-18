@@ -3,7 +3,6 @@
 
 """Radkummerkasten frontend."""
 
-
 from .address import Address
 from .issues import Issues
 

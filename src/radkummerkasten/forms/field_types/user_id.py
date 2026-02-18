@@ -3,7 +3,6 @@
 
 """A custom wtforms.Field for user ids."""
 
-
 import uuid
 
 import wtforms

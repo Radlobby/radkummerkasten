@@ -3,7 +3,6 @@
 
 """The database model for media attached to comments on the radkummerkasten map."""
 
-
 import pathlib
 import uuid
 

@@ -3,7 +3,6 @@
 
 """A form to upload/save a new issue."""
 
-
 # from wtforms import (
 #     StringField,
 #     validators,

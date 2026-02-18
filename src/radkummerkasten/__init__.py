@@ -3,7 +3,6 @@
 
 """A suggestion/complaints box for the Austrian Cycling Federation (Radlobby)."""
 
-
 from .application import create_app
 
 __all__ = ["create_app"]

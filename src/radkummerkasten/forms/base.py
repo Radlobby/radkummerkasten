@@ -3,7 +3,6 @@
 
 """Forms (using WTForms) that are used in API calls and the frontend."""
 
-
 import datetime
 import os
 

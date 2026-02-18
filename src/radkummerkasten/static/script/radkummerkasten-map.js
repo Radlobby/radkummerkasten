@@ -17,7 +17,7 @@
             style: "/static/maps/combined-root.json",
             bearing: 0,
             pitch: 15,
-            zoom: 13,
+            zoom: 14.5,
             center: [16.3659, 48.1998],
             minZoom: 7,
             maxZoom: 16.9,

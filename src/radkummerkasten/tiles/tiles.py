@@ -3,7 +3,6 @@
 
 """Serve vector tiles."""
 
-
 import flask
 
 from ..core import TileLayer

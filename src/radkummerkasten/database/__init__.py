@@ -3,7 +3,6 @@
 
 """Database routines for radkummerkasten."""
 
-
 from .database import Database
 
 __all__ = [

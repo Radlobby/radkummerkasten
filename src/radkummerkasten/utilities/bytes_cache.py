@@ -3,7 +3,6 @@
 
 """A mechanism for caching byte string."""
 
-
 import datetime
 import functools
 import os.path

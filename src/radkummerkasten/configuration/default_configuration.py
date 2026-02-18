@@ -3,7 +3,6 @@
 
 """Default configuration options."""
 
-
 import datetime
 
 
