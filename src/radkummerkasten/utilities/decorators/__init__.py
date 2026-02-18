@@ -3,7 +3,6 @@
 
 """Decorators for flask views, blueprints, and methods."""
 
-
 from .csp_allow_self import csp_allow_self
 from .local_referer_only import local_referer_only
 

@@ -3,7 +3,6 @@
 
 """The database model for addresses on the radkummerkasten map."""
 
-
 from typing import Optional
 
 from sqlalchemy.orm import (

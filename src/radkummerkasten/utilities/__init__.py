@@ -3,11 +3,10 @@
 
 """Utility classes used in radkummerkasten."""
 
-
 from . import decorators
 from .bytes_cache import BytesCache
 
 __all__ = [
-    "decorators",
     "BytesCache",
+    "decorators",
 ]

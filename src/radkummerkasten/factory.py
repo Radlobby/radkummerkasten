@@ -3,7 +3,6 @@
 
 """A factory that sets defaults for all radkummerkasten application objects."""
 
-
 import os
 import pathlib
 
@@ -42,5 +41,17 @@ def create_app(package_name, instance_path, *args, **kwargs):
         application.config.from_object(ProductionConfiguration)
 
     application.config.from_pyfile("configuration.py", silent=True)
+
+    static_folder = application.config["STATIC_FOLDER"]
+    if static_folder is not None:
+        static_folder = instance_path / static_folder
+        if static_folder.exists():
+            application.static_folder = static_folder
+
+    template_folder = application.config["TEMPLATE_FOLDER"]
+    if template_folder is not None:
+        template_folder = instance_path / template_folder
+        if template_folder.exists():
+            application.template_folder = template_folder
 
     return application

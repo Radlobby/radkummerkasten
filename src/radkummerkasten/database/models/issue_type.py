@@ -3,7 +3,6 @@
 
 """Issues types reported to the radkummerkasten map."""
 
-
 import enum
 
 __all__ = ["IssueType"]

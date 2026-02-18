@@ -3,7 +3,6 @@
 
 """Browser testing."""
 
-
 import functools
 
 import pytest

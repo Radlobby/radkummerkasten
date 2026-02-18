@@ -3,7 +3,6 @@
 
 """Add custom functions to an sqlalchemy.orm.session.Session."""
 
-
 import sqlalchemy
 
 __all__ = ["Session"]

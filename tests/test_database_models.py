@@ -3,7 +3,6 @@
 
 """Test the database models for radkummerkasten."""
 
-
 import datetime
 import pathlib
 import uuid
@@ -27,9 +26,9 @@ class TestDatabaseModels:
         ("street", "housenumber", "postcode", "municipality"),
         (("Biene-Maja-Straße", "27", "6969", "Gigritschpatschn"),),
     )
-    def test_address(self, engine, street, housenumber, postcode, municipality):
+    def test_address(self, database, street, housenumber, postcode, municipality):
         """Test radkummerkasten.database.models.Address."""
-        with engine.session.begin() as session:
+        with database.session.begin() as session:
             address = Address(
                 street,
                 housenumber,
@@ -56,9 +55,9 @@ class TestDatabaseModels:
             ),
         ),
     )
-    def test_comment(self, engine, title, text):
+    def test_comment(self, database, title, text):
         """Test radkummerkasten.database.models.Comment."""
-        with engine.session.begin() as session:
+        with database.session.begin() as session:
             user = User("Max", "Mustermann", "max.mustermann@example.com")
             comment = Comment(title, text, user=user)
             issue = Issue(IssueType.ANDERES, 48.1, 16.2)
@@ -81,9 +80,9 @@ class TestDatabaseModels:
         ("lon", "lat", "issue_type"),
         ((48.1234, 16.9876, IssueType.GEFAHRENSTELLE),),
     )
-    def test_issue(self, engine, lon, lat, issue_type):
+    def test_issue(self, database, lon, lat, issue_type):
         """Test radkummerkasten.database.models.Issue."""
-        with engine.session.begin() as session:
+        with database.session.begin() as session:
             issue = Issue(issue_type, lon, lat)
             session.add(issue)
 
@@ -99,9 +98,9 @@ class TestDatabaseModels:
 
             session.rollback()
 
-    def test_media(self, engine, photo_path, instance_directory):
+    def test_media(self, database, photo_path, instance_directory):
         """Test radkummerkasten.database.models.Address."""
-        with engine.session.begin() as session:
+        with database.session.begin() as session:
             media_item = Media.from_image_file(photo_path, instance_directory)
             session.add(media_item)
 
@@ -112,9 +111,9 @@ class TestDatabaseModels:
 
             session.rollback()
 
-    def test_media_app_context(self, application, engine, photo_path):
+    def test_media_app_context(self, application, database, photo_path):
         """Test radkummerkasten.database.models.Address."""
-        with engine.session.begin() as session, application.app_context():
+        with database.session.begin() as session, application.app_context():
             media_item = Media.from_image_file(photo_path)
             session.add(media_item)
 
@@ -125,9 +124,9 @@ class TestDatabaseModels:
 
             session.rollback()
 
-    def test_media_no_app_context(self, engine, photo_path):
+    def test_media_no_app_context(self, database, photo_path):
         """Test radkummerkasten.database.models.Address."""
-        with engine.session.begin() as session:
+        with database.session.begin() as session:
             with pytest.raises(
                 RuntimeError,
                 match=(

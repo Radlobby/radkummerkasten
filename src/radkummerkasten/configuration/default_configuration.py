@@ -3,7 +3,6 @@
 
 """Default configuration options."""
 
-
 import datetime
 
 
@@ -15,3 +14,6 @@ class DefaultConfiguration(BaseConfiguration):
     """Default configuration."""
 
     PERMANENT_SESSION_LIFETIME = datetime.timedelta(weeks=26)
+    ADDITIONAL_TILE_LAYERS = {}
+    STATIC_FOLDER = None
+    TEMPLATE_FOLDER = None

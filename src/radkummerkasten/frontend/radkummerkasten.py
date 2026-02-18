@@ -3,8 +3,9 @@
 
 """Return the single-page radkummerkasten front page."""
 
-
 import flask
+
+from ..core import UserManager
 
 __all__ = [
     "Radkummerkasten",
@@ -18,17 +19,17 @@ class Radkummerkasten(flask.Blueprint):
     _IMPORT_NAME = __name__
     _kwargs = {
         "url_prefix": "/",
-        "static_folder": "static",
-        "template_folder": "templates",
     }
 
-    def __init__(self, configuration, *args, **kwargs):
+    def __init__(self, application, *args, **kwargs):
         """Provide a blueprint for radkummerkasten lookup."""
         kwargs = kwargs or {}
         kwargs.update(self._kwargs)
         super().__init__(self._NAME, self._IMPORT_NAME, *args, **kwargs)
 
-        self.configuration = configuration
+        self.configuration = application.config
+
+        self.user_manager = UserManager()
 
         self.add_url_rule(
             "/",
@@ -38,4 +39,20 @@ class Radkummerkasten(flask.Blueprint):
 
     def radkummerkasten(self):
         """Return the single-page radkummerkasten front page."""
-        return flask.render_template("index.html")
+        # mail = flask.current_app.extensions["mail"]
+        # mail.send_message(
+        #     subject="Test",
+        #     recipients=[
+        #         "christoph.fink@christophfink.com",
+        #         "christoph.fink@univie.ac.at",
+        #         "christoph.fink@gmail.com",
+        #     ],
+        #     body=(
+        #         "This is a test e-mail."
+        #         "\n\n"
+        #         "i’m just trying out how flask_mail works (and whether it does)."
+        #     ),
+        # )
+        # print(flask.current_app.template_folder)
+        user = self.user_manager.current_user
+        return flask.render_template("map.html.jinja", user=user)

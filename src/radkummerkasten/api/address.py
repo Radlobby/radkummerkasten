@@ -3,7 +3,6 @@
 
 """Look up the closest street address for a pair of coordinates."""
 
-
 import flask
 
 from ..core import AddressLookup
@@ -23,16 +22,18 @@ class Address(flask.Blueprint):
         "url_prefix": "/api/address",
     }
 
-    def __init__(self, configuration, *args, **kwargs):
+    def __init__(self, application, *args, **kwargs):
         """Provide a blueprint for address lookup."""
         kwargs = kwargs or {}
         kwargs.update(self._kwargs)
         super().__init__(self._NAME, self._IMPORT_NAME, *args, **kwargs)
 
-        self.configuration = configuration
+        self.configuration = application.config
 
         try:
-            self._address_lookup = AddressLookup(configuration["ADDRESS_LOOKUP_LAYER"])
+            self._address_lookup = AddressLookup(
+                self.configuration["ADDRESS_LOOKUP_LAYER"]
+            )
         except KeyError:
             self._address_lookup = None
 

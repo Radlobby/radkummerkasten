@@ -3,7 +3,6 @@
 
 """The database model for issues on the radkummerkasten map."""
 
-
 import datetime
 import uuid
 from typing import List

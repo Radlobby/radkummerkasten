@@ -3,7 +3,6 @@
 
 """A locally listening flask server for testing."""
 
-
 import contextlib
 import functools
 import socket

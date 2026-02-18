@@ -27,7 +27,6 @@ ecmascript_files = ["src/radkummerkasten/frontend/static/radkummerkasten.js"]
 
 """
 
-
 import functools
 import os
 import pathlib

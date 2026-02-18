@@ -1,0 +1,42 @@
+{% extends "base.html.jinja" %}
+
+{% block title %}Radkummerkasten: log in via e-mail{% endblock %}
+
+{% block profile_pane %}
+<div id="profile-pane" class="offcanvas offcanvas-top show">
+
+    <form method="post" action="{{ url_for("auth.post_login") }}">
+
+    <div class="row row-cols-auto mb-5 gx-1 gy-3">
+        <div class="col-lg-12">
+            <label class="form-label">Login via e-mail</label>
+            <p>Enter your e-mail address to receive a login link.</p>
+            <div class="input-group">
+                <div class="form-floating">
+                    <input
+                        type="email"
+                        autocomplete="email"
+                        class="form-control"
+                        name="email_address"
+                        placeholder="e-mail address"
+                        aria-label="e-mail address"
+                        required
+                    >
+                    <label for="email">e-mail address</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-auto mb-5 gx-1 gy-3">
+        <div class="col-lg-6">
+            <button type="submit" class="form-control btn btn-primary">
+                Login
+            </button>
+        </div>
+    </div>
+
+    </form>
+
+</div>
+{% endblock %}

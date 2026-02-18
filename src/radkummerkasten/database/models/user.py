@@ -3,13 +3,11 @@
 
 """The database model for users on the radkummerkasten map."""
 
-
-from typing import List
+import datetime
 
 from sqlalchemy.orm import (
     Mapped,
     mapped_column,
-    relationship,
 )
 
 from .base import Base
@@ -20,13 +18,18 @@ __all__ = ["User"]
 class User(Base):
     """A user registered to post to the radkummerkasten map."""
 
-    first_name: Mapped[str]
-    last_name: Mapped[str]
     email_address: Mapped[str] = mapped_column(unique=True)
+    first_name: Mapped[str] = mapped_column(default="")
+    last_name: Mapped[str] = mapped_column(default="")
 
-    comments: Mapped[List["Comment"]] = relationship(  # noqa: F821
-        back_populates="user",
-        default_factory=list,
+    # comments: Mapped[List["Comment"]] = relationship(  # noqa: F821
+    #    back_populates="user",
+    #    default_factory=list,
+    # )
+
+    details_confirmed: Mapped[datetime.datetime] = mapped_column(
+        default=None, nullable=True
     )
-
-    can_post: Mapped[bool] = mapped_column(default=False)
+    share_details_with_council: Mapped[datetime.datetime] = mapped_column(
+        default=None, nullable=True
+    )

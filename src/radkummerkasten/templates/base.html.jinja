@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{% block title %}{% endblock %}</title>
+
+        {% block meta %}
+        <meta name="author" content="Radlobby">
+        <meta
+            name="description"
+            content=""
+        >
+        <meta
+            name="keywords"
+            content=""
+        >
+        {% endblock %}
+
+        {% block canonical %}
+        <link rel="canonical" href="https://radkummerkasten.at/">
+        {% endblock %}
+        <link rel="manifest" href="{{url_for("static", filename="radkummerkasten.at.webmanifest", _external=True)}}">
+
+        <link rel="icon" type="image/svg+xml" href="{{url_for("static", filename="images/favicon.svg")}}" sizes="any">
+        <link rel="apple-touch-icon" href="{{url_for("static", filename="images/apple-touch-icon.png")}}">
+
+        <script src="{{url_for("static", filename="script/maplibre-gl.min.js")}}"></script>
+        <link href="{{url_for("static", filename="style/maplibre-gl.min.css")}} rel="stylesheet" />
+
+        <link rel="stylesheet" href="{{url_for("static", filename="fonts/roboto.min.css")}}">
+        <link rel="stylesheet" href="{{url_for("static", filename="style/radkummerkasten.min.css")}}">
+
+        <script src="{{url_for("static", filename="script/bootstrap.min.js")}}"></script>
+        <!--//<script src="{{url_for("static", filename="js/bootstrap-darkmode.js")}}"></script>//-->
+        <script src="{{url_for("static", filename="script/radkummerkasten.min.js")}}"></script>
+    </head>
+    <body>
+        <h1>{{ self.title }}</h1>
+        {% include "radlobby-logo.html.jinja" %}
+
+        {% block map_pane %}
+        <div id="map">
+             <div class="d-flex justify-content-center">
+                 <div class="spinner-border" role="status">
+                     <span class="visually-hidden">Loading …</span>
+                 </div>
+             </div>
+        </div>
+        {% endblock %}
+
+        {% block profile_pane %}
+        <div id="profile-pane" class="offcanvas offcanvas-top">
+            <!--// {{ user.id }} //-->
+            <!--// {{ user.email_address }} //-->
+             <div class="d-flex justify-content-center">
+                 <div class="spinner-border" role="status">
+                     <span class="visually-hidden">Loading …</span>
+                 </div>
+             </div>
+        </div>
+        {% endblock %}
+
+        {# toggles for panes #}
+        <nav class="navbar fixed-bottom bg-body-tertiary">
+            <div class="container-fluid">
+                <div class="navbar-nav">
+                    <a 
+                        class="nav-link icon icon-hover icon-user"
+                        href="/profile"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#profile-pane"
+                        aria-controls="profile-pane"
+                    >
+                        <span class="visually-hidden">Profile</span>
+                    </a>
+                    <a 
+                        class="nav-link icon icon-hover icon-add-issue"
+                        href="/issues/new"
+                    >
+                        <span class="visually-hidden">Report issue</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+    </body>
+</html>

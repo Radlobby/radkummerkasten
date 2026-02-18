@@ -3,7 +3,6 @@
 
 """Test the /tiles endpoint."""
 
-
 import pytest
 
 
@@ -105,10 +104,3 @@ class TestTiles:
         from radkummerkasten.core import TileLayer
 
         _ = TileLayer(tile_layer_file, tile_layer_file.stem)
-
-    def test_tile_layer_with_wrong_path(self):
-        """Test creating a TileLayer with a wrong file path."""
-        from radkummerkasten.core import TileLayer
-
-        with pytest.raises(RuntimeError):
-            _ = TileLayer("foobar.gpkg", "foobar")

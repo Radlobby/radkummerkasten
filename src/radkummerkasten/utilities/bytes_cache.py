@@ -3,10 +3,10 @@
 
 """A mechanism for caching byte string."""
 
-
 import datetime
 import functools
 import os.path
+import shutil
 
 try:
     import xdg_base_dirs
@@ -72,7 +72,9 @@ class BytesCache:
     @functools.cached_property
     def cache_directory(self):
         """Path to cache directory."""
-        return xdg_base_dirs.xdg_cache_home() / f"{PACKAGE}" / f"{self.name}"
+        return (
+            xdg_base_dirs.xdg_cache_home() / f"{PACKAGE}" / f"{self.name}"
+        ).resolve()
 
     def expire(self, key, now=False):
         """
@@ -92,3 +94,8 @@ class BytesCache:
             < (datetime.datetime.now() - self.max_cache_age)
         ):
             cache_path.unlink()
+
+    def empty(self):
+        """Delete the entire contents of the cache."""
+        shutil.rmtree(self.cache_directory, ignore_errors=True)
+        self.cache_directory.mkdir(parents=True, exist_ok=True)

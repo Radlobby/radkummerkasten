@@ -3,10 +3,11 @@
 
 """The application object for radkummerkasten."""
 
-
 import pathlib
 
-from . import api, factory, frontend, tiles
+from . import api, auth, factory, frontend, tiles
+from .database import Database
+from .utilities.mail import Mail
 
 __all__ = [
     "create_app",
@@ -23,12 +24,18 @@ def create_app(instance_path=DEFAULT_INSTANCE_PATH):
     application = factory.create_app(
         __MODULE__,
         instance_path=instance_path,
-        static_url_path=None,
-        static_folder=None,
     )
 
-    application.register_blueprint(frontend.Radkummerkasten(application.config))
-    application.register_blueprint(api.Address(application.config))
-    application.register_blueprint(tiles.Tiles(application.config))
+    database = Database()
+    database.init_app(application)
+
+    mail = Mail()
+    mail.init_app(application)
+
+    application.register_blueprint(frontend.Radkummerkasten(application))
+    application.register_blueprint(tiles.Tiles(application))
+    application.register_blueprint(api.Address(application))
+    application.register_blueprint(api.Issues(application))
+    application.register_blueprint(auth.Auth(application))
 
     return application

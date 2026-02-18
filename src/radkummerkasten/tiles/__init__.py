@@ -3,7 +3,6 @@
 
 """Map tiles for radkummerkasten."""
 
-
 from .tiles import Tiles
 
 __all__ = [

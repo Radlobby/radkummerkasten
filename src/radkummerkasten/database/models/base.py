@@ -3,7 +3,6 @@
 
 """A common sqlalchemy DeclarativeBase to share between models."""
 
-
 __all__ = ["Base"]
 
 

@@ -3,7 +3,6 @@
 
 """A decorator to add a Content-Security-Policy header."""
 
-
 import flask_cors
 
 __all__ = ["csp_allow_self"]
