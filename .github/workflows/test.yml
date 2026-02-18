@@ -35,7 +35,7 @@ jobs:
           # - windows-latest
           # - macos-latest
         python_version:
-          # - '3.14'  # still waiting for https://github.com/geopandas/pyogrio/issues/560
+          - '3.14'
           - '3.13'
           - '3.12'
           - '3.11'
